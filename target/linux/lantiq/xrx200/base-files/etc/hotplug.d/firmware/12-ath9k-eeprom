@@ -34,7 +34,7 @@ case "$FIRMWARE" in
 				;;
 			tplink,tdw8970|\
 			tplink,tdw8980)
-				caldata_extract "boardconfig" 0x21000 0x1000
+				caldata_extract "radio" 0x1000 0x440
 				;;
 			*)
 				caldata_die "board $board is not supported yet"

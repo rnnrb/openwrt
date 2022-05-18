@@ -110,7 +110,7 @@
 };
 
 &eth0 {
-	nvmem-cells = <&macaddr_ath9k_cal_f100>;
+	nvmem-cells = <&boardconfig_macaddr>;
 	nvmem-cell-names = "mac-address";
 };
 
@@ -204,7 +204,7 @@
 			gpio-controller;
 			qca,no-eeprom;
 			ieee80211-freq-limit = <2402000 2482000>;
-			nvmem-cells = <&macaddr_ath9k_cal_f100>;
+			nvmem-cells = <&boardconfig_macaddr>;
 			nvmem-cell-names = "mac-address";
 			mac-address-increment = <2>;
 		};
@@ -232,19 +232,28 @@
 			};
 
 			partition@20000 {
-				reg = <0x20000 0x7a0000>;
+				reg = <0x20000 0x7bf000>;
 				label = "firmware";
 			};
 
-			partition@7c0000 {
-				reg = <0x7c0000 0x10000>;
-				label = "config";
+			/* MAC Adress and WPS PIN */
+			boardconfig: partition@7df000 {
+				reg = <0x7df000 0x1000>;
+				label = "boardconfig";
 				read-only;
 			};
 
-			ath9k_cal: partition@7d0000 {
-				reg = <0x7d0000 0x30000>;
-				label = "boardconfig";
+			/* used by U-Boot to store memory settings */
+			partition@7e0000 {
+				reg = <0x7e0000 0x10000>;
+				label = "ddr_settings"; 
+				read-only;
+			};
+
+			/* Wi-Fi calibration data */
+			partition@7f0000 {
+				reg = <0x7f0000 0x10000>;
+				label = "radio";
 				read-only;
 			};
 		};
@@ -269,12 +278,16 @@
 	vbus-supply = <&usb_vbus>;
 };
 
-&ath9k_cal {
+&boardconfig {
 	compatible = "nvmem-cells";
 	#address-cells = <1>;
 	#size-cells = <1>;
 
-	macaddr_ath9k_cal_f100: macaddr@f100 {
-		reg = <0xf100 0x6>;
+	/* MAC Adress */
+	boardconfig_macaddr: macaddr@100 {
+		reg = <0x100 0x6>;
 	};
+	
+	/* 0x7df200 contains WPS PIN used on OEM firmware, unused in OpenWRT */
+	
 };
