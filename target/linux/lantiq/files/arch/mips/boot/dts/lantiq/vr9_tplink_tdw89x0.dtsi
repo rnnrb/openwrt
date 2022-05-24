@@ -204,8 +204,8 @@
 			gpio-controller;
 			qca,no-eeprom;
 			ieee80211-freq-limit = <2402000 2482000>;
-			nvmem-cells = <&boardconfig_macaddr>;
-			nvmem-cell-names = "mac-address";
+			nvmem-cells = <&boardconfig_macaddr>, <&ath9k_cal>;
+			nvmem-cell-names = "mac-address", "calibration";
 			mac-address-increment = <2>;
 		};
 	};
@@ -251,7 +251,7 @@
 			};
 
 			/* Wi-Fi calibration data */
-			partition@7f0000 {
+			radio: partition@7f0000 {
 				reg = <0x7f0000 0x10000>;
 				label = "radio";
 				read-only;
@@ -290,4 +290,14 @@
 	
 	/* 0x7df200 contains WPS PIN used on OEM firmware, unused in OpenWRT */
 	
+};
+
+&radio {
+	compatible = "nvmem-cells";
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	ath9k_cal: cal@440 {
+		reg = <0x1000 0x440>;
+	};
 };
