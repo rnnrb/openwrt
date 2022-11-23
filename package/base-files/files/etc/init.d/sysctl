@@ -36,9 +36,41 @@ apply_defaults() {
 	fi
 }
 
+handle_sysctl() {
+	local cfg="$1"
+	local sysctl="$2"
+
+	local enable section value
+
+	config_get_bool enable "$cfg" enable '0'
+	config_get section "$cfg" section
+
+	if [ "$enable" = '0' ]; then
+		# get default value
+		value="$(grep "$section" /tmp/sysctl-default.conf)"
+		value="${value##*= }"
+	else
+		config_get value "$cfg" value
+	fi
+
+	[ -z "$section" ] || [ -z "$value" ] && return
+
+	echo "${section}=${value}" >> "$sysctl"
+}
+
+apply_uci() {
+	mkdir -p /tmp/sysctl.d
+
+	rm -f /tmp/sysctl.d/01-uci.conf
+
+	config_load sysctl
+	config_foreach handle_sysctl sysctl "/tmp/sysctl.d/01-uci.conf"
+}
+
 start() {
 	[ -f /tmp/sysctl-default.conf ] || sysctl -a 1>/tmp/sysctl-default.conf 2>/dev/null
 	apply_defaults
+	apply_uci
 	for CONF in /etc/sysctl.d/*.conf /etc/sysctl.conf /tmp/sysctl.d/*.conf; do
 		[ -f "$CONF" ] && sysctl -e -p "$CONF" >&-
 	done
