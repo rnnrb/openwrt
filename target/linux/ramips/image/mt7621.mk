@@ -1003,7 +1003,7 @@ define Device/gnubee_gb-pc1
   $(Device/dsa-migration)
   $(Device/uimage-lzma-loader)
   DEVICE_VENDOR := GnuBee
-  DEVICE_MODEL := Personal Cloud One
+  DEVICE_MODEL := GB-PC1
   DEVICE_PACKAGES := kmod-ata-ahci kmod-usb3 kmod-sdhci-mt7620 \
 	-wpad-basic-mbedtls -uboot-envtools
   IMAGE_SIZE := 32448k
@@ -1014,7 +1014,7 @@ define Device/gnubee_gb-pc2
   $(Device/dsa-migration)
   $(Device/uimage-lzma-loader)
   DEVICE_VENDOR := GnuBee
-  DEVICE_MODEL := Personal Cloud Two
+  DEVICE_MODEL := GB-PC2
   DEVICE_PACKAGES := kmod-ata-ahci kmod-usb3 kmod-sdhci-mt7620 \
 	-wpad-basic-mbedtls -uboot-envtools
   IMAGE_SIZE := 32448k
@@ -1614,6 +1614,32 @@ define Device/mts_wg430223
   DEVICE_PACKAGES := kmod-mt7615-firmware uencrypt-mbedtls
 endef
 TARGET_DEVICES += mts_wg430223
+
+define Device/netgear_eax12
+  $(Device/nand)
+  DEVICE_VENDOR := NETGEAR
+  DEVICE_MODEL := EAX12
+  DEVICE_ALT0_VENDOR := NETGEAR
+  DEVICE_ALT0_MODEL := EAX11
+  DEVICE_ALT0_VARIANT := v2
+  DEVICE_ALT1_VENDOR := NETGEAR
+  DEVICE_ALT1_MODEL := EAX15
+  DEVICE_ALT1_VARIANT := v2
+  DEVICE_PACKAGES := kmod-mt7915-firmware -uboot-envtools
+  NETGEAR_ENC_MODEL := EAX12
+  NETGEAR_ENC_REGION := US
+  NETGEAR_ENC_HW_ID_LIST := 1010000004540000_NETGEAR
+  NETGEAR_ENC_MODEL_LIST := EAX12;EAX11v2;EAX15v2
+  IMAGE_SIZE := 57344k
+  KERNEL_LOADADDR := 0x82000000
+  KERNEL := kernel-bin | relocate-kernel 0x80001000 | lzma | \
+	fit lzma $$(KDIR)/image-$$(firstword $$(DEVICE_DTS)).dtb | \
+	append-squashfs4-fakeroot
+  IMAGES += factory.img
+  IMAGE/factory.img := append-kernel | pad-to $$(KERNEL_SIZE) | \
+	append-ubi | check-size | netgear-encrypted-factory
+endef
+TARGET_DEVICES += netgear_eax12
 
 define Device/netgear_ex6150
   $(Device/dsa-migration)
