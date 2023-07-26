@@ -67,6 +67,10 @@ platform_do_upgrade() {
 			;;
 		esac
 		;;
+	buffalo,wsr-6000ax8)
+		buffalo_wsr_6000ax6_do_upgrade "$1" && nand_do_upgrade_success
+		nand_do_upgrade_failed
+		;;
 	cudy,wr3000-v1)
 		default_do_upgrade "$1"
 		;;

@@ -24,6 +24,7 @@ mediatek_setup_interfaces()
 	glinet,gl-mt3000)
 		ucidef_set_interfaces_lan_wan eth1 eth0
 		;;
+	buffalo,wsr-6000ax8|\
 	h3c,magic-nx30-pro)
 		ucidef_set_interfaces_lan_wan "lan1 lan2 lan3" eth1
 		;;
