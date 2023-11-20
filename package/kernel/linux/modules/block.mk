@@ -11,7 +11,7 @@ define KernelPackage/aoe
   SUBMENU:=$(BLOCK_MENU)
   TITLE:=ATA over Ethernet support
   KCONFIG:=CONFIG_ATA_OVER_ETH
-  FILES:=$(LINUX_DIR)/drivers/block/aoe/aoe.ko
+  FILES:=drivers/block/aoe/aoe.ko
   AUTOLOAD:=$(call AutoLoad,30,aoe)
 endef
 
@@ -28,8 +28,8 @@ define KernelPackage/ata-core
   DEPENDS:=@PCI_SUPPORT||TARGET_sunxi +kmod-scsi-core
   KCONFIG:=CONFIG_ATA
   FILES:= \
-	$(LINUX_DIR)/drivers/ata/libata.ko \
-	-$(LINUX_DIR)/drivers/ata/libahci.ko
+	drivers/ata/libata.ko \
+	-drivers/ata/libahci.ko
 endef
 
 $(eval $(call KernelPackage,ata-core))
@@ -45,7 +45,7 @@ define KernelPackage/ata-ahci
   TITLE:=AHCI Serial ATA support
   KCONFIG:=CONFIG_SATA_AHCI
   FILES:= \
-    $(LINUX_DIR)/drivers/ata/ahci.ko
+    drivers/ata/ahci.ko
   AUTOLOAD:=$(call AutoLoad,41,libahci ahci,1)
   $(call AddDepends/ata)
 endef
@@ -61,8 +61,8 @@ define KernelPackage/ata-ahci-platform
   TITLE:=AHCI Serial ATA Platform support
   KCONFIG:=CONFIG_SATA_AHCI_PLATFORM
   FILES:= \
-    $(LINUX_DIR)/drivers/ata/ahci_platform.ko \
-    $(LINUX_DIR)/drivers/ata/libahci_platform.ko
+    drivers/ata/ahci_platform.ko \
+    drivers/ata/libahci_platform.ko
   AUTOLOAD:=$(call AutoLoad,40,libahci libahci_platform ahci_platform,1)
   $(call AddDepends/ata,@TARGET_ipq806x||TARGET_layerscape||TARGET_sunxi)
 endef
@@ -77,7 +77,7 @@ $(eval $(call KernelPackage,ata-ahci-platform))
 define KernelPackage/ata-artop
   TITLE:=ARTOP 6210/6260 PATA support
   KCONFIG:=CONFIG_PATA_ARTOP
-  FILES:=$(LINUX_DIR)/drivers/ata/pata_artop.ko
+  FILES:=drivers/ata/pata_artop.ko
   AUTOLOAD:=$(call AutoLoad,41,pata_artop,1)
   $(call AddDepends/ata)
 endef
@@ -92,7 +92,7 @@ $(eval $(call KernelPackage,ata-artop))
 define KernelPackage/ata-nvidia-sata
   TITLE:=Nvidia Serial ATA support
   KCONFIG:=CONFIG_SATA_NV
-  FILES:=$(LINUX_DIR)/drivers/ata/sata_nv.ko
+  FILES:=drivers/ata/sata_nv.ko
   AUTOLOAD:=$(call AutoLoad,41,sata_nv,1)
   $(call AddDepends/ata)
 endef
@@ -105,7 +105,7 @@ define KernelPackage/ata-pdc202xx-old
   KCONFIG:= \
        CONFIG_ATA_SFF=y \
        CONFIG_PATA_PDC_OLD
-  FILES:=$(LINUX_DIR)/drivers/ata/pata_pdc202xx_old.ko
+  FILES:=drivers/ata/pata_pdc202xx_old.ko
   AUTOLOAD:=$(call AutoLoad,41,pata_pdc202xx_old,1)
   $(call AddDepends/ata)
 endef
@@ -121,7 +121,7 @@ $(eval $(call KernelPackage,ata-pdc202xx-old))
 define KernelPackage/ata-piix
   TITLE:=Intel PIIX PATA/SATA support
   KCONFIG:=CONFIG_ATA_PIIX
-  FILES:=$(LINUX_DIR)/drivers/ata/ata_piix.ko
+  FILES:=drivers/ata/ata_piix.ko
   AUTOLOAD:=$(call AutoLoad,41,ata_piix,1)
   $(call AddDepends/ata)
 endef
@@ -137,7 +137,7 @@ $(eval $(call KernelPackage,ata-piix))
 define KernelPackage/ata-sil
   TITLE:=Silicon Image SATA support
   KCONFIG:=CONFIG_SATA_SIL
-  FILES:=$(LINUX_DIR)/drivers/ata/sata_sil.ko
+  FILES:=drivers/ata/sata_sil.ko
   AUTOLOAD:=$(call AutoLoad,41,sata_sil,1)
   $(call AddDepends/ata)
 endef
@@ -152,7 +152,7 @@ $(eval $(call KernelPackage,ata-sil))
 define KernelPackage/ata-sil24
   TITLE:=Silicon Image 3124/3132 SATA support
   KCONFIG:=CONFIG_SATA_SIL24
-  FILES:=$(LINUX_DIR)/drivers/ata/sata_sil24.ko
+  FILES:=drivers/ata/sata_sil24.ko
   AUTOLOAD:=$(call AutoLoad,41,sata_sil24,1)
   $(call AddDepends/ata)
 endef
@@ -167,7 +167,7 @@ $(eval $(call KernelPackage,ata-sil24))
 define KernelPackage/ata-via-sata
   TITLE:=VIA SATA support
   KCONFIG:=CONFIG_SATA_VIA
-  FILES:=$(LINUX_DIR)/drivers/ata/sata_via.ko
+  FILES:=drivers/ata/sata_via.ko
   AUTOLOAD:=$(call AutoLoad,41,sata_via,1)
   $(call AddDepends/ata)
 endef
@@ -183,7 +183,7 @@ define KernelPackage/block2mtd
   SUBMENU:=$(BLOCK_MENU)
   TITLE:=Block device MTD emulation
   KCONFIG:=CONFIG_MTD_BLOCK2MTD
-  FILES:=$(LINUX_DIR)/drivers/mtd/devices/block2mtd.ko
+  FILES:=drivers/mtd/devices/block2mtd.ko
 endef
 
 $(eval $(call KernelPackage,block2mtd))
@@ -193,7 +193,7 @@ define KernelPackage/dax
   SUBMENU:=$(BLOCK_MENU)
   TITLE:=DAX: direct access to differentiated memory
   KCONFIG:=CONFIG_DAX
-  FILES:=$(LINUX_DIR)/drivers/dax/dax.ko
+  FILES:=drivers/dax/dax.ko
 endef
 
 $(eval $(call KernelPackage,dax))
@@ -222,11 +222,11 @@ define KernelPackage/dm
 	CONFIG_DM_CRYPT \
 	CONFIG_DM_MIRROR
   FILES:= \
-    $(LINUX_DIR)/drivers/md/dm-mod.ko \
-    $(LINUX_DIR)/drivers/md/dm-crypt.ko \
-    $(LINUX_DIR)/drivers/md/dm-log.ko \
-    $(LINUX_DIR)/drivers/md/dm-mirror.ko \
-    $(LINUX_DIR)/drivers/md/dm-region-hash.ko
+    drivers/md/dm-mod.ko \
+    drivers/md/dm-crypt.ko \
+    drivers/md/dm-log.ko \
+    drivers/md/dm-mirror.ko \
+    drivers/md/dm-region-hash.ko
   AUTOLOAD:=$(call AutoLoad,30,dm-mod dm-log dm-region-hash dm-mirror dm-crypt,1)
 endef
 
@@ -243,7 +243,7 @@ define KernelPackage/dm-raid
            +kmod-md-raid0 +kmod-md-raid1 +kmod-md-raid10 +kmod-md-raid456
   KCONFIG:= \
 	CONFIG_DM_RAID
-  FILES:=$(LINUX_DIR)/drivers/md/dm-raid.ko
+  FILES:=drivers/md/dm-raid.ko
   AUTOLOAD:=$(call AutoLoad,31,dm-raid)
 endef
 
@@ -264,10 +264,10 @@ define KernelPackage/iscsi-initiator
 	CONFIG_ISCSI_TCP \
 	CONFIG_SCSI_ISCSI_ATTRS=y
   FILES:= \
-	$(LINUX_DIR)/drivers/scsi/iscsi_tcp.ko \
-	$(LINUX_DIR)/drivers/scsi/libiscsi.ko \
-	$(LINUX_DIR)/drivers/scsi/libiscsi_tcp.ko \
-	$(LINUX_DIR)/drivers/scsi/scsi_transport_iscsi.ko
+	drivers/scsi/iscsi_tcp.ko \
+	drivers/scsi/libiscsi.ko \
+	drivers/scsi/libiscsi_tcp.ko \
+	drivers/scsi/scsi_transport_iscsi.ko
   AUTOLOAD:=$(call AutoProbe,libiscsi libiscsi_tcp scsi_transport_iscsi iscsi_tcp)
 endef
 
@@ -288,7 +288,7 @@ define KernelPackage/md-mod
        CONFIG_BLK_DEV_MD=m \
        CONFIG_MD_AUTODETECT=y \
        CONFIG_MD_FAULTY=n
-  FILES:=$(LINUX_DIR)/drivers/md/md-mod.ko
+  FILES:=drivers/md/md-mod.ko
   AUTOLOAD:=$(call AutoLoad,27,md-mod)
 endef
 
@@ -310,7 +310,7 @@ define KernelPackage/md-linear
 $(call KernelPackage/md/Depends,)
   TITLE:=RAID Linear Module
   KCONFIG:=CONFIG_MD_LINEAR
-  FILES:=$(LINUX_DIR)/drivers/md/linear.ko
+  FILES:=drivers/md/linear.ko
   AUTOLOAD:=$(call AutoLoad,28,linear)
 endef
 
@@ -325,7 +325,7 @@ define KernelPackage/md-raid0
 $(call KernelPackage/md/Depends,)
   TITLE:=RAID0 Module
   KCONFIG:=CONFIG_MD_RAID0
-  FILES:=$(LINUX_DIR)/drivers/md/raid0.ko
+  FILES:=drivers/md/raid0.ko
   AUTOLOAD:=$(call AutoLoad,28,raid0)
 endef
 
@@ -340,7 +340,7 @@ define KernelPackage/md-raid1
 $(call KernelPackage/md/Depends,)
   TITLE:=RAID1 Module
   KCONFIG:=CONFIG_MD_RAID1
-  FILES:=$(LINUX_DIR)/drivers/md/raid1.ko
+  FILES:=drivers/md/raid1.ko
   AUTOLOAD:=$(call AutoLoad,28,raid1)
 endef
 
@@ -355,7 +355,7 @@ define KernelPackage/md-raid10
 $(call KernelPackage/md/Depends,)
   TITLE:=RAID10 Module
   KCONFIG:=CONFIG_MD_RAID10
-  FILES:=$(LINUX_DIR)/drivers/md/raid10.ko
+  FILES:=drivers/md/raid10.ko
   AUTOLOAD:=$(call AutoLoad,28,raid10)
 endef
 
@@ -379,12 +379,12 @@ $(call KernelPackage/md/Depends,+kmod-lib-raid6 +kmod-lib-xor +kmod-lib-crc32c)
        CONFIG_MD_RAID456 \
        CONFIG_MULTICORE_RAID456=n
   FILES:= \
-	$(LINUX_DIR)/crypto/async_tx/async_tx.ko \
-	$(LINUX_DIR)/crypto/async_tx/async_memcpy.ko \
-	$(LINUX_DIR)/crypto/async_tx/async_xor.ko \
-	$(LINUX_DIR)/crypto/async_tx/async_pq.ko \
-	$(LINUX_DIR)/crypto/async_tx/async_raid6_recov.ko \
-	$(LINUX_DIR)/drivers/md/raid456.ko
+	crypto/async_tx/async_tx.ko \
+	crypto/async_tx/async_memcpy.ko \
+	crypto/async_tx/async_xor.ko \
+	crypto/async_tx/async_pq.ko \
+	crypto/async_tx/async_raid6_recov.ko \
+	drivers/md/raid456.ko
   AUTOLOAD:=$(call AutoLoad,28, async_tx async_memcpy async_xor async_pq async_raid6_recov raid456)
 endef
 
@@ -409,7 +409,7 @@ define KernelPackage/md-multipath
 $(call KernelPackage/md/Depends,)
   TITLE:=MD Multipath Module
   KCONFIG:=CONFIG_MD_MULTIPATH
-  FILES:=$(LINUX_DIR)/drivers/md/multipath.ko
+  FILES:=drivers/md/multipath.ko
   AUTOLOAD:=$(call AutoLoad,29,multipath)
 endef
 
@@ -430,8 +430,8 @@ define KernelPackage/libsas
 	CONFIG_SCSI_SAS_HOST_SMP=y \
 	CONFIG_SCSI_SAS_LIBSAS_DEBUG=y
   FILES:= \
-	$(LINUX_DIR)/drivers/scsi/scsi_transport_sas.ko \
-	$(LINUX_DIR)/drivers/scsi/libsas/libsas.ko
+	drivers/scsi/scsi_transport_sas.ko \
+	drivers/scsi/libsas/libsas.ko
   AUTOLOAD:=$(call AutoLoad,29,scsi_transport_sas libsas,1)
 endef
 
@@ -448,7 +448,7 @@ define KernelPackage/loop
   KCONFIG:= \
 	CONFIG_BLK_DEV_LOOP \
 	CONFIG_BLK_DEV_CRYPTOLOOP=n
-  FILES:=$(LINUX_DIR)/drivers/block/loop.ko
+  FILES:=drivers/block/loop.ko
   AUTOLOAD:=$(call AutoLoad,30,loop,1)
 endef
 
@@ -466,7 +466,7 @@ define KernelPackage/mvsas
   KCONFIG:= \
 	CONFIG_SCSI_MVSAS \
 	CONFIG_SCSI_MVSAS_TASKLET=n
-  FILES:=$(LINUX_DIR)/drivers/scsi/mvsas/mvsas.ko
+  FILES:=drivers/scsi/mvsas/mvsas.ko
   AUTOLOAD:=$(call AutoLoad,40,mvsas,1)
 endef
 
@@ -481,7 +481,7 @@ define KernelPackage/nbd
   SUBMENU:=$(BLOCK_MENU)
   TITLE:=Network block device support
   KCONFIG:=CONFIG_BLK_DEV_NBD
-  FILES:=$(LINUX_DIR)/drivers/block/nbd.ko
+  FILES:=drivers/block/nbd.ko
   AUTOLOAD:=$(call AutoLoad,30,nbd)
 endef
 
@@ -502,8 +502,8 @@ define KernelPackage/nvme
 	CONFIG_NVME_MULTIPATH=n \
 	CONFIG_NVME_HWMON=y
   FILES:= \
-	$(LINUX_DIR)/drivers/nvme/host/nvme-core.ko \
-	$(LINUX_DIR)/drivers/nvme/host/nvme.ko
+	drivers/nvme/host/nvme-core.ko \
+	drivers/nvme/host/nvme.ko
   AUTOLOAD:=$(call AutoLoad,30,nvme-core nvme,1)
 endef
 
@@ -523,9 +523,9 @@ define KernelPackage/scsi-core
 	CONFIG_SCSI_COMMON \
 	CONFIG_BLK_DEV_SD
   FILES:= \
-	$(LINUX_DIR)/drivers/scsi/scsi_mod.ko \
-	$(LINUX_DIR)/drivers/scsi/scsi_common.ko \
-	$(LINUX_DIR)/drivers/scsi/sd_mod.ko
+	drivers/scsi/scsi_mod.ko \
+	drivers/scsi/scsi_common.ko \
+	drivers/scsi/sd_mod.ko
   AUTOLOAD:=$(call AutoLoad,40,scsi_mod scsi_common sd_mod,1)
 endef
 
@@ -539,7 +539,7 @@ define KernelPackage/scsi-generic
   KCONFIG:= \
 	CONFIG_CHR_DEV_SG
   FILES:= \
-	$(LINUX_DIR)/drivers/scsi/sg.ko
+	drivers/scsi/sg.ko
   AUTOLOAD:=$(call AutoLoad,65,sg)
 endef
 
@@ -550,7 +550,7 @@ define KernelPackage/cdrom
   TITLE:=Kernel library module for CD / DVD drives
   KCONFIG:=CONFIG_CDROM
   HIDDEN:=1
-  FILES:=$(LINUX_DIR)/drivers/cdrom/cdrom.ko
+  FILES:=drivers/cdrom/cdrom.ko
 endef
 
 $(eval $(call KernelPackage,cdrom))
@@ -563,7 +563,7 @@ define KernelPackage/scsi-cdrom
   KCONFIG:= \
     CONFIG_BLK_DEV_SR \
     CONFIG_BLK_DEV_SR_VENDOR=n
-  FILES:=$(LINUX_DIR)/drivers/scsi/sr_mod.ko
+  FILES:=drivers/scsi/sr_mod.ko
   AUTOLOAD:=$(call AutoLoad,45,sr_mod)
 endef
 
@@ -577,7 +577,7 @@ define KernelPackage/scsi-tape
   KCONFIG:= \
     CONFIG_CHR_DEV_ST
   FILES:= \
-    $(LINUX_DIR)/drivers/scsi/st.ko
+    drivers/scsi/st.ko
   AUTOLOAD:=$(call AutoLoad,45,st)
 endef
 
@@ -591,7 +591,7 @@ define KernelPackage/iosched-bfq
     CONFIG_BFQ_GROUP_IOSCHED=y \
     CONFIG_BFQ_CGROUP_DEBUG=n
   FILES:= \
-    $(LINUX_DIR)/block/bfq.ko
+    block/bfq.ko
   AUTOLOAD:=$(call AutoLoad,10,bfq)
 endef
 

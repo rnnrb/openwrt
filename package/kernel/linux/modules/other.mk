@@ -16,7 +16,7 @@ define KernelPackage/6lowpan
   KCONFIG:= \
 	CONFIG_6LOWPAN \
 	CONFIG_6LOWPAN_NHC=n
-  FILES:=$(LINUX_DIR)/net/6lowpan/6lowpan.ko
+  FILES:=net/6lowpan/6lowpan.ko
   AUTOLOAD:=$(call AutoProbe,6lowpan)
 endef
 
@@ -50,15 +50,15 @@ define KernelPackage/bluetooth
 	CONFIG_BT_HIDP
   $(call AddDepends/rfkill)
   FILES:= \
-	$(LINUX_DIR)/net/bluetooth/bluetooth.ko \
-	$(LINUX_DIR)/net/bluetooth/rfcomm/rfcomm.ko \
-	$(LINUX_DIR)/net/bluetooth/bnep/bnep.ko \
-	$(LINUX_DIR)/net/bluetooth/hidp/hidp.ko \
-	$(LINUX_DIR)/drivers/bluetooth/hci_uart.ko \
-	$(LINUX_DIR)/drivers/bluetooth/btusb.ko \
-	$(LINUX_DIR)/drivers/bluetooth/btintel.ko \
-	$(LINUX_DIR)/drivers/bluetooth/btrtl.ko \
-	$(LINUX_DIR)/drivers/bluetooth/btmtk.ko@ge5.17
+	net/bluetooth/bluetooth.ko \
+	net/bluetooth/rfcomm/rfcomm.ko \
+	net/bluetooth/bnep/bnep.ko \
+	net/bluetooth/hidp/hidp.ko \
+	drivers/bluetooth/hci_uart.ko \
+	drivers/bluetooth/btusb.ko \
+	drivers/bluetooth/btintel.ko \
+	drivers/bluetooth/btrtl.ko \
+	drivers/bluetooth/btmtk.ko@ge5.17
   AUTOLOAD:=$(call AutoProbe,bluetooth rfcomm bnep hidp hci_uart btusb)
 endef
 
@@ -76,7 +76,7 @@ define KernelPackage/ath3k
 	CONFIG_BT_ATH3K \
 	CONFIG_BT_HCIUART_ATH3K=y
   FILES:= \
-	$(LINUX_DIR)/drivers/bluetooth/ath3k.ko
+	drivers/bluetooth/ath3k.ko
   AUTOLOAD:=$(call AutoProbe,ath3k)
 endef
 
@@ -92,7 +92,7 @@ define KernelPackage/bluetooth-6lowpan
   TITLE:=Bluetooth 6LoWPAN support
   DEPENDS:=+kmod-6lowpan +kmod-bluetooth
   KCONFIG:=CONFIG_BT_6LOWPAN
-  FILES:=$(LINUX_DIR)/net/bluetooth/bluetooth_6lowpan.ko
+  FILES:=net/bluetooth/bluetooth_6lowpan.ko
   AUTOLOAD:=$(call AutoProbe,bluetooth_6lowpan)
 endef
 
@@ -111,8 +111,8 @@ define KernelPackage/btmrvl
 	CONFIG_BT_MRVL \
 	CONFIG_BT_MRVL_SDIO
   FILES:= \
-	$(LINUX_DIR)/drivers/bluetooth/btmrvl.ko \
-	$(LINUX_DIR)/drivers/bluetooth/btmrvl_sdio.ko
+	drivers/bluetooth/btmrvl.ko \
+	drivers/bluetooth/btmrvl_sdio.ko
   AUTOLOAD:=$(call AutoProbe,btmrvl btmrvl_sdio)
 endef
 
@@ -130,7 +130,7 @@ define KernelPackage/btsdio
   KCONFIG:= \
 	CONFIG_BT_HCIBTSDIO
   FILES:= \
-	$(LINUX_DIR)/drivers/bluetooth/btsdio.ko
+	drivers/bluetooth/btsdio.ko
   AUTOLOAD:=$(call AutoProbe,btsdio)
 endef
 
@@ -148,7 +148,7 @@ define KernelPackage/dma-buf
   KCONFIG:=CONFIG_DMA_SHARED_BUFFER
   ifeq ($(strip $(CONFIG_EXTERNAL_KERNEL_TREE)),"")
     ifeq ($(strip $(CONFIG_KERNEL_GIT_CLONE_URI)),"")
-      FILES:=$(LINUX_DIR)/drivers/dma-buf/dma-shared-buffer.ko
+      FILES:=drivers/dma-buf/dma-shared-buffer.ko
     endif
   endif
   AUTOLOAD:=$(call AutoLoad,20,dma-shared-buffer)
@@ -160,7 +160,7 @@ define KernelPackage/eeprom-93cx6
   SUBMENU:=$(OTHER_MENU)
   TITLE:=EEPROM 93CX6 support
   KCONFIG:=CONFIG_EEPROM_93CX6
-  FILES:=$(LINUX_DIR)/drivers/misc/eeprom/eeprom_93cx6.ko
+  FILES:=drivers/misc/eeprom/eeprom_93cx6.ko
   AUTOLOAD:=$(call AutoLoad,20,eeprom_93cx6)
 endef
 
@@ -176,7 +176,7 @@ define KernelPackage/eeprom-at24
   TITLE:=EEPROM AT24 support
   KCONFIG:=CONFIG_EEPROM_AT24
   DEPENDS:=+kmod-i2c-core +kmod-regmap-i2c
-  FILES:=$(LINUX_DIR)/drivers/misc/eeprom/at24.ko
+  FILES:=drivers/misc/eeprom/at24.ko
   AUTOLOAD:=$(call AutoProbe,at24)
 endef
 
@@ -191,7 +191,7 @@ define KernelPackage/eeprom-at25
   SUBMENU:=$(OTHER_MENU)
   TITLE:=EEPROM AT25 support
   KCONFIG:=CONFIG_EEPROM_AT25
-  FILES:=$(LINUX_DIR)/drivers/misc/eeprom/at25.ko
+  FILES:=drivers/misc/eeprom/at25.ko
   AUTOLOAD:=$(call AutoProbe,at25)
 endef
 
@@ -212,10 +212,10 @@ define KernelPackage/google-firmware
 	CONFIG_GOOGLE_MEMCONSOLE_COREBOOT \
 	CONFIG_GOOGLE_VPD
   FILES:= \
-	  $(LINUX_DIR)/drivers/firmware/google/coreboot_table.ko \
-	  $(LINUX_DIR)/drivers/firmware/google/memconsole.ko \
-	  $(LINUX_DIR)/drivers/firmware/google/memconsole-coreboot.ko \
-	  $(LINUX_DIR)/drivers/firmware/google/vpd-sysfs.ko
+	  drivers/firmware/google/coreboot_table.ko \
+	  drivers/firmware/google/memconsole.ko \
+	  drivers/firmware/google/memconsole-coreboot.ko \
+	  drivers/firmware/google/vpd-sysfs.ko
   AUTOLOAD:=$(call AutoProbe,coreboot_table memconsole-coreboot vpd-sysfs)
 endef
 
@@ -233,7 +233,7 @@ define KernelPackage/gpio-f7188x
   TITLE:=Fintek F718xx/F818xx GPIO Support
   DEPENDS:=@GPIO_SUPPORT @TARGET_x86
   KCONFIG:=CONFIG_GPIO_F7188X
-  FILES:=$(LINUX_DIR)/drivers/gpio/gpio-f7188x.ko
+  FILES:=drivers/gpio/gpio-f7188x.ko
   AUTOLOAD:=$(call AutoProbe,gpio-f7188x)
 endef
 
@@ -248,7 +248,7 @@ define KernelPackage/lkdtm
   SUBMENU:=$(OTHER_MENU)
   TITLE:=Linux Kernel Dump Test Tool Module
   KCONFIG:=CONFIG_LKDTM
-  FILES:=$(LINUX_DIR)/drivers/misc/lkdtm/lkdtm.ko
+  FILES:=drivers/misc/lkdtm/lkdtm.ko
   AUTOLOAD:=$(call AutoProbe,lkdtm)
 endef
 
@@ -266,7 +266,7 @@ define KernelPackage/pinctrl-mcp23s08
   HIDDEN:=1
   DEPENDS:=@GPIO_SUPPORT +kmod-regmap-core
   KCONFIG:=CONFIG_PINCTRL_MCP23S08
-  FILES:=$(LINUX_DIR)/drivers/pinctrl/pinctrl-mcp23s08.ko
+  FILES:=drivers/pinctrl/pinctrl-mcp23s08.ko
   AUTOLOAD:=$(call AutoLoad,40,pinctrl-mcp23s08)
 endef
 
@@ -285,7 +285,7 @@ define KernelPackage/pinctrl-mcp23s08-i2c
 	+kmod-i2c-core \
 	+kmod-regmap-i2c
   KCONFIG:=CONFIG_PINCTRL_MCP23S08_I2C
-  FILES:=$(LINUX_DIR)/drivers/pinctrl/pinctrl-mcp23s08_i2c.ko
+  FILES:=drivers/pinctrl/pinctrl-mcp23s08_i2c.ko
   AUTOLOAD:=$(call AutoLoad,40,pinctrl-mcp23s08-i2c)
 endef
 
@@ -301,7 +301,7 @@ define KernelPackage/pinctrl-mcp23s08-spi
   TITLE:=Microchip MCP23xxx I/O expander (SPI)
   DEPENDS:=@GPIO_SUPPORT +kmod-pinctrl-mcp23s08
   KCONFIG:=CONFIG_PINCTRL_MCP23S08_SPI
-  FILES:=$(LINUX_DIR)/drivers/pinctrl/pinctrl-mcp23s08_spi.ko
+  FILES:=drivers/pinctrl/pinctrl-mcp23s08_spi.ko
   AUTOLOAD:=$(call AutoLoad,40,pinctrl-mcp23s08-spi)
 endef
 
@@ -316,7 +316,7 @@ define KernelPackage/gpio-nxp-74hc164
   SUBMENU:=$(OTHER_MENU)
   TITLE:=NXP 74HC164 GPIO expander support
   KCONFIG:=CONFIG_GPIO_74X164
-  FILES:=$(LINUX_DIR)/drivers/gpio/gpio-74x164.ko
+  FILES:=drivers/gpio/gpio-74x164.ko
   AUTOLOAD:=$(call AutoProbe,gpio-74x164)
 endef
 
@@ -331,7 +331,7 @@ define KernelPackage/gpio-pca953x
   DEPENDS:=@GPIO_SUPPORT +kmod-i2c-core +kmod-regmap-i2c
   TITLE:=PCA95xx, TCA64xx, and MAX7310 I/O ports
   KCONFIG:=CONFIG_GPIO_PCA953X
-  FILES:=$(LINUX_DIR)/drivers/gpio/gpio-pca953x.ko
+  FILES:=drivers/gpio/gpio-pca953x.ko
   AUTOLOAD:=$(call AutoLoad,55,gpio-pca953x)
 endef
 
@@ -347,7 +347,7 @@ define KernelPackage/gpio-pcf857x
   DEPENDS:=@GPIO_SUPPORT +kmod-i2c-core
   TITLE:=PCX857x, PCA967x and MAX732X I2C GPIO expanders
   KCONFIG:=CONFIG_GPIO_PCF857X
-  FILES:=$(LINUX_DIR)/drivers/gpio/gpio-pcf857x.ko
+  FILES:=drivers/gpio/gpio-pcf857x.ko
   AUTOLOAD:=$(call AutoLoad,55,gpio-pcf857x)
 endef
 
@@ -363,7 +363,7 @@ define KernelPackage/gpio-it87
   DEPENDS:=@GPIO_SUPPORT @TARGET_x86
   TITLE:=GPIO support for IT87xx Super I/O chips
   KCONFIG:=CONFIG_GPIO_IT87
-  FILES:=$(LINUX_DIR)/drivers/gpio/gpio-it87.ko
+  FILES:=drivers/gpio/gpio-it87.ko
   AUTOLOAD:=$(call AutoLoad,25,gpio-it87,1)
 endef
 
@@ -381,7 +381,7 @@ define KernelPackage/gpio-amd-fch
   DEPENDS:=@GPIO_SUPPORT @TARGET_x86
   TITLE:=GPIO support for AMD Fusion Controller Hub (G-series SOCs)
   KCONFIG:=CONFIG_GPIO_AMD_FCH
-  FILES:=$(LINUX_DIR)/drivers/gpio/gpio-amd-fch.ko
+  FILES:=drivers/gpio/gpio-amd-fch.ko
   AUTOLOAD:=$(call AutoLoad,25,gpio-amd-fch,1)
 endef
 
@@ -400,8 +400,8 @@ define KernelPackage/ppdev
 	CONFIG_PARPORT \
 	CONFIG_PPDEV
   FILES:= \
-	$(LINUX_DIR)/drivers/parport/parport.ko \
-	$(LINUX_DIR)/drivers/char/ppdev.ko
+	drivers/parport/parport.ko \
+	drivers/char/ppdev.ko
   AUTOLOAD:=$(call AutoLoad,50,parport ppdev)
 endef
 
@@ -424,7 +424,7 @@ define KernelPackage/parport-pc
 	CONFIG_SCSI_IMM=n \
 	CONFIG_SCSI_PPA=n
   FILES:= \
-	$(LINUX_DIR)/drivers/parport/parport_pc.ko
+	drivers/parport/parport_pc.ko
   AUTOLOAD:=$(call AutoLoad,51,parport_pc)
 endef
 
@@ -438,7 +438,7 @@ define KernelPackage/lp
   KCONFIG:= \
 	CONFIG_PRINTER
   FILES:= \
-	$(LINUX_DIR)/drivers/char/lp.ko
+	drivers/char/lp.ko
   AUTOLOAD:=$(call AutoLoad,52,lp)
 endef
 
@@ -458,8 +458,8 @@ define KernelPackage/mmc
 	CONFIG_MMC_WBSD=n \
 	CONFIG_SDIO_UART=n
   FILES:= \
-	$(LINUX_DIR)/drivers/mmc/core/mmc_core.ko \
-	$(LINUX_DIR)/drivers/mmc/core/mmc_block.ko
+	drivers/mmc/core/mmc_core.ko \
+	drivers/mmc/core/mmc_block.ko
   AUTOLOAD:=$(call AutoProbe,mmc_core mmc_block,1)
 endef
 
@@ -479,8 +479,8 @@ define KernelPackage/sdhci
 	CONFIG_MMC_SDHCI_PLTFM \
 	CONFIG_MMC_SDHCI_PCI=n
   FILES:= \
-	$(LINUX_DIR)/drivers/mmc/host/sdhci.ko \
-	$(LINUX_DIR)/drivers/mmc/host/sdhci-pltfm.ko
+	drivers/mmc/host/sdhci.ko \
+	drivers/mmc/host/sdhci-pltfm.ko
 
   AUTOLOAD:=$(call AutoProbe,sdhci-pltfm,1)
 endef
@@ -501,7 +501,7 @@ define KernelPackage/rfkill
     CONFIG_RFKILL_INPUT=y \
     CONFIG_RFKILL_LEDS=y
   FILES:= \
-    $(LINUX_DIR)/net/rfkill/rfkill.ko
+    net/rfkill/rfkill.ko
   AUTOLOAD:=$(call AutoLoad,20,rfkill)
 endef
 
@@ -518,7 +518,7 @@ define KernelPackage/softdog
   TITLE:=Software watchdog driver
   KCONFIG:=CONFIG_SOFT_WATCHDOG \
   	CONFIG_SOFT_WATCHDOG_PRETIMEOUT=n
-  FILES:=$(LINUX_DIR)/drivers/$(WATCHDOG_DIR)/softdog.ko
+  FILES:=drivers/$(WATCHDOG_DIR)/softdog.ko
   AUTOLOAD:=$(call AutoLoad,50,softdog,1)
 endef
 
@@ -545,7 +545,7 @@ define KernelPackage/ssb
 	CONFIG_SSB_POSSIBLE=y \
 	CONFIG_SSB_SPROM=y \
 	CONFIG_SSB_SILENT=y
-  FILES:=$(LINUX_DIR)/drivers/ssb/ssb.ko
+  FILES:=drivers/ssb/ssb.ko
   AUTOLOAD:=$(call AutoLoad,18,ssb,1)
 endef
 
@@ -572,7 +572,7 @@ define KernelPackage/bcma
 	CONFIG_BCMA_DRIVER_PCI_HOSTMODE=n \
 	CONFIG_BCMA_DRIVER_GMAC_CMN=n \
 	CONFIG_BCMA_DEBUG=n
-  FILES:=$(LINUX_DIR)/drivers/bcma/bcma.ko
+  FILES:=drivers/bcma/bcma.ko
   AUTOLOAD:=$(call AutoLoad,29,bcma)
 endef
 
@@ -590,7 +590,7 @@ define KernelPackage/rtc-ds1307
   DEPENDS:=+kmod-i2c-core +kmod-regmap-i2c +kmod-hwmon-core
   KCONFIG:=CONFIG_RTC_DRV_DS1307 \
 	CONFIG_RTC_CLASS=y
-  FILES:=$(LINUX_DIR)/drivers/rtc/rtc-ds1307.ko
+  FILES:=drivers/rtc/rtc-ds1307.ko
   AUTOLOAD:=$(call AutoProbe,rtc-ds1307)
 endef
 
@@ -610,7 +610,7 @@ define KernelPackage/rtc-ds1374
   KCONFIG:=CONFIG_RTC_DRV_DS1374 \
 	CONFIG_RTC_DRV_DS1374_WDT=n \
 	CONFIG_RTC_CLASS=y
-  FILES:=$(LINUX_DIR)/drivers/rtc/rtc-ds1374.ko
+  FILES:=drivers/rtc/rtc-ds1374.ko
   AUTOLOAD:=$(call AutoProbe,rtc-ds1374)
 endef
 
@@ -628,7 +628,7 @@ define KernelPackage/rtc-ds1672
   DEPENDS:=+kmod-i2c-core
   KCONFIG:=CONFIG_RTC_DRV_DS1672 \
 	CONFIG_RTC_CLASS=y
-  FILES:=$(LINUX_DIR)/drivers/rtc/rtc-ds1672.ko
+  FILES:=drivers/rtc/rtc-ds1672.ko
   AUTOLOAD:=$(call AutoProbe,rtc-ds1672)
 endef
 
@@ -646,7 +646,7 @@ define KernelPackage/rtc-em3027
   DEPENDS:=+kmod-i2c-core
   KCONFIG:=CONFIG_RTC_DRV_EM3027 \
 	CONFIG_RTC_CLASS=y
-  FILES:=$(LINUX_DIR)/drivers/rtc/rtc-em3027.ko
+  FILES:=drivers/rtc/rtc-em3027.ko
   AUTOLOAD:=$(call AutoProbe,rtc-em3027)
 endef
 
@@ -664,7 +664,7 @@ define KernelPackage/rtc-isl1208
   DEPENDS:=+kmod-i2c-core
   KCONFIG:=CONFIG_RTC_DRV_ISL1208 \
 	CONFIG_RTC_CLASS=y
-  FILES:=$(LINUX_DIR)/drivers/rtc/rtc-isl1208.ko
+  FILES:=drivers/rtc/rtc-isl1208.ko
   AUTOLOAD:=$(call AutoProbe,rtc-isl1208)
 endef
 
@@ -682,7 +682,7 @@ define KernelPackage/rtc-pcf8563
   DEPENDS:=+kmod-i2c-core
   KCONFIG:=CONFIG_RTC_DRV_PCF8563 \
 	CONFIG_RTC_CLASS=y
-  FILES:=$(LINUX_DIR)/drivers/rtc/rtc-pcf8563.ko
+  FILES:=drivers/rtc/rtc-pcf8563.ko
   AUTOLOAD:=$(call AutoProbe,rtc-pcf8563)
 endef
 
@@ -701,7 +701,7 @@ define KernelPackage/rtc-pcf2123
   DEPENDS:=+kmod-regmap-spi
   KCONFIG:=CONFIG_RTC_DRV_PCF2123 \
 	CONFIG_RTC_CLASS=y
-  FILES:=$(LINUX_DIR)/drivers/rtc/rtc-pcf2123.ko
+  FILES:=drivers/rtc/rtc-pcf2123.ko
   AUTOLOAD:=$(call AutoProbe,rtc-pcf2123)
 endef
 
@@ -718,7 +718,7 @@ define KernelPackage/rtc-pcf2127
   DEPENDS:=+kmod-i2c-core +kmod-regmap-spi
   KCONFIG:=CONFIG_RTC_DRV_PCF2127 \
 	CONFIG_RTC_CLASS=y
-  FILES:=$(LINUX_DIR)/drivers/rtc/rtc-pcf2127.ko
+  FILES:=drivers/rtc/rtc-pcf2127.ko
   AUTOLOAD:=$(call AutoProbe,rtc-pcf2127)
 endef
 
@@ -735,7 +735,7 @@ define KernelPackage/rtc-r7301
   DEPENDS:=+kmod-regmap-mmio
   KCONFIG:=CONFIG_RTC_DRV_R7301 \
 	CONFIG_RTC_CLASS=y
-  FILES:=$(LINUX_DIR)/drivers/rtc/rtc-r7301.ko
+  FILES:=drivers/rtc/rtc-r7301.ko
   AUTOLOAD:=$(call AutoProbe,rtc-r7301)
 endef
 
@@ -752,7 +752,7 @@ define KernelPackage/rtc-rs5c372a
   DEPENDS:=+kmod-i2c-core
   KCONFIG:=CONFIG_RTC_DRV_RS5C372 \
 	CONFIG_RTC_CLASS=y
-  FILES:=$(LINUX_DIR)/drivers/rtc/rtc-rs5c372.ko
+  FILES:=drivers/rtc/rtc-rs5c372.ko
   AUTOLOAD:=$(call AutoLoad,50,rtc-rs5c372,1)
 endef
 
@@ -769,7 +769,7 @@ define KernelPackage/rtc-rx8025
   DEPENDS:=+kmod-i2c-core
   KCONFIG:=CONFIG_RTC_DRV_RX8025 \
 	CONFIG_RTC_CLASS=y
-  FILES:=$(LINUX_DIR)/drivers/rtc/rtc-rx8025.ko
+  FILES:=drivers/rtc/rtc-rx8025.ko
   AUTOLOAD:=$(call AutoLoad,50,rtc-rx8025,1)
 endef
 
@@ -786,7 +786,7 @@ define KernelPackage/rtc-s35390a
   DEPENDS:=+kmod-i2c-core
   KCONFIG:=CONFIG_RTC_DRV_S35390A \
 	CONFIG_RTC_CLASS=y
-  FILES:=$(LINUX_DIR)/drivers/rtc/rtc-s35390a.ko
+  FILES:=drivers/rtc/rtc-s35390a.ko
   AUTOLOAD:=$(call AutoLoad,50,rtc-s35390a,1)
 endef
 
@@ -803,7 +803,7 @@ define KernelPackage/rtc-x1205
   DEPENDS:=+kmod-i2c-core
   KCONFIG:=CONFIG_RTC_DRV_X1205 \
 	CONFIG_RTC_CLASS=y
-  FILES:=$(LINUX_DIR)/drivers/rtc/rtc-x1205.ko
+  FILES:=drivers/rtc/rtc-x1205.ko
   AUTOLOAD:=$(call AutoProbe,rtc-x1205)
 endef
 
@@ -818,14 +818,14 @@ define KernelPackage/mtdtests
   TITLE:=MTD subsystem tests
   KCONFIG:=CONFIG_MTD_TESTS
   FILES:=\
-	$(LINUX_DIR)/drivers/mtd/tests/mtd_nandecctest.ko \
-	$(LINUX_DIR)/drivers/mtd/tests/mtd_oobtest.ko \
-	$(LINUX_DIR)/drivers/mtd/tests/mtd_pagetest.ko \
-	$(LINUX_DIR)/drivers/mtd/tests/mtd_readtest.ko \
-	$(LINUX_DIR)/drivers/mtd/tests/mtd_speedtest.ko \
-	$(LINUX_DIR)/drivers/mtd/tests/mtd_stresstest.ko \
-	$(LINUX_DIR)/drivers/mtd/tests/mtd_subpagetest.ko \
-	$(LINUX_DIR)/drivers/mtd/tests/mtd_torturetest.ko
+	drivers/mtd/tests/mtd_nandecctest.ko \
+	drivers/mtd/tests/mtd_oobtest.ko \
+	drivers/mtd/tests/mtd_pagetest.ko \
+	drivers/mtd/tests/mtd_readtest.ko \
+	drivers/mtd/tests/mtd_speedtest.ko \
+	drivers/mtd/tests/mtd_stresstest.ko \
+	drivers/mtd/tests/mtd_subpagetest.ko \
+	drivers/mtd/tests/mtd_torturetest.ko
 endef
 
 define KernelPackage/mtdtests/description
@@ -839,7 +839,7 @@ define KernelPackage/mtdoops
   SUBMENU:=$(OTHER_MENU)
   TITLE:=Log panic/oops to an MTD buffer
   KCONFIG:=CONFIG_MTD_OOPS
-  FILES:=$(LINUX_DIR)/drivers/mtd/mtdoops.ko
+  FILES:=drivers/mtd/mtdoops.ko
 endef
 
 define KernelPackage/mtdoops/description
@@ -855,7 +855,7 @@ define KernelPackage/mtdram
   KCONFIG:=CONFIG_MTD_MTDRAM \
     CONFIG_MTDRAM_TOTAL_SIZE=4096 \
     CONFIG_MTDRAM_ERASE_SIZE=128
-  FILES:=$(LINUX_DIR)/drivers/mtd/devices/mtdram.ko
+  FILES:=drivers/mtd/devices/mtdram.ko
 endef
 
 define KernelPackage/mtdram/description
@@ -872,7 +872,7 @@ define KernelPackage/ramoops
   KCONFIG:=CONFIG_PSTORE_RAM \
 	CONFIG_PSTORE_CONSOLE=y
   DEPENDS:=+kmod-pstore +kmod-reed-solomon
-  FILES:= $(LINUX_DIR)/fs/pstore/ramoops.ko
+  FILES:=fs/pstore/ramoops.ko
   AUTOLOAD:=$(call AutoLoad,30,ramoops,1)
 endef
 
@@ -890,7 +890,7 @@ define KernelPackage/reed-solomon
   KCONFIG:=CONFIG_REED_SOLOMON \
 	CONFIG_REED_SOLOMON_DEC8=y \
 	CONFIG_REED_SOLOMON_ENC8=y
-  FILES:= $(LINUX_DIR)/lib/reed_solomon/reed_solomon.ko
+  FILES:=lib/reed_solomon/reed_solomon.ko
   AUTOLOAD:=$(call AutoLoad,30,reed_solomon,1)
 endef
 
@@ -914,10 +914,10 @@ define KernelPackage/serial-8250
 	CONFIG_SERIAL_8250_DETECT_IRQ=n \
 	CONFIG_SERIAL_8250_RSA=n
   FILES:= \
-	$(LINUX_DIR)/drivers/tty/serial/8250/8250.ko \
-	$(LINUX_DIR)/drivers/tty/serial/8250/8250_base.ko \
-	$(if $(CONFIG_PCI),$(LINUX_DIR)/drivers/tty/serial/8250/8250_pci.ko) \
-	$(if $(CONFIG_GPIOLIB),$(LINUX_DIR)/drivers/tty/serial/serial_mctrl_gpio.ko)
+	drivers/tty/serial/8250/8250.ko \
+	drivers/tty/serial/8250/8250_base.ko \
+	$(if $(CONFIG_PCI),drivers/tty/serial/8250/8250_pci.ko) \
+	$(if $(CONFIG_GPIOLIB),drivers/tty/serial/serial_mctrl_gpio.ko)
   AUTOLOAD:=$(call AutoProbe,8250 8250_base 8250_pci)
 endef
 
@@ -932,7 +932,7 @@ define KernelPackage/serial-8250-exar
   SUBMENU:=$(OTHER_MENU)
   TITLE:=Exar 8250 UARTs
   KCONFIG:= CONFIG_SERIAL_8250_EXAR
-  FILES:=$(LINUX_DIR)/drivers/tty/serial/8250/8250_exar.ko
+  FILES:=drivers/tty/serial/8250/8250_exar.ko
   AUTOLOAD:=$(call AutoProbe,8250 8250_base 8250_exar)
   DEPENDS:=@PCI_SUPPORT +kmod-serial-8250
 endef
@@ -949,7 +949,7 @@ define KernelPackage/regmap-core
   TITLE:=Generic register map support
   HIDDEN:=1
   KCONFIG:=CONFIG_REGMAP
-  FILES:=-$(LINUX_DIR)/drivers/base/regmap/regmap-core.ko
+  FILES:=-drivers/base/regmap/regmap-core.ko
 endef
 
 define KernelPackage/regmap-core/description
@@ -966,7 +966,7 @@ define KernelPackage/regmap-spi
   HIDDEN:=1
   KCONFIG:=CONFIG_REGMAP_SPI \
 	   CONFIG_SPI=y
-  FILES:=$(LINUX_DIR)/drivers/base/regmap/regmap-spi.ko
+  FILES:=drivers/base/regmap/regmap-spi.ko
 endef
 
 define KernelPackage/regmap-spi/description
@@ -982,7 +982,7 @@ define KernelPackage/regmap-i2c
   DEPENDS:=+kmod-regmap-core +kmod-i2c-core
   HIDDEN:=1
   KCONFIG:=CONFIG_REGMAP_I2C
-  FILES:=$(LINUX_DIR)/drivers/base/regmap/regmap-i2c.ko
+  FILES:=drivers/base/regmap/regmap-i2c.ko
 endef
 
 define KernelPackage/regmap-i2c/description
@@ -998,7 +998,7 @@ define KernelPackage/regmap-mmio
   DEPENDS:=+kmod-regmap-core
   HIDDEN:=1
   KCONFIG:=CONFIG_REGMAP_MMIO
-  FILES:=$(LINUX_DIR)/drivers/base/regmap/regmap-mmio.ko
+  FILES:=drivers/base/regmap/regmap-mmio.ko
 endef
 
 define KernelPackage/regmap-mmio/description
@@ -1013,7 +1013,7 @@ define KernelPackage/ikconfig
   TITLE:=Kernel configuration via /proc/config.gz
   KCONFIG:=CONFIG_IKCONFIG \
 	   CONFIG_IKCONFIG_PROC=y
-  FILES:=$(LINUX_DIR)/kernel/configs.ko
+  FILES:=kernel/configs.ko
   AUTOLOAD:=$(call AutoLoad,70,configs)
 endef
 
@@ -1034,8 +1034,8 @@ define KernelPackage/zram
 	CONFIG_ZRAM_WRITEBACK=n \
 	CONFIG_ZSMALLOC_STAT=n
   FILES:= \
-	$(LINUX_DIR)/mm/zsmalloc.ko \
-	$(LINUX_DIR)/drivers/block/zram/zram.ko
+	mm/zsmalloc.ko \
+	drivers/block/zram/zram.ko
   AUTOLOAD:=$(call AutoLoad,20,zsmalloc zram)
 endef
 
@@ -1079,7 +1079,7 @@ define KernelPackage/pps
   SUBMENU:=$(OTHER_MENU)
   TITLE:=PPS support
   KCONFIG:=CONFIG_PPS
-  FILES:=$(LINUX_DIR)/drivers/pps/pps_core.ko
+  FILES:=drivers/pps/pps_core.ko
   AUTOLOAD:=$(call AutoLoad,17,pps_core,1)
 endef
 
@@ -1097,7 +1097,7 @@ define KernelPackage/pps-gpio
   TITLE:=PPS client using GPIO
   DEPENDS:=+kmod-pps
   KCONFIG:=CONFIG_PPS_CLIENT_GPIO
-  FILES:=$(LINUX_DIR)/drivers/pps/clients/pps-gpio.ko
+  FILES:=drivers/pps/clients/pps-gpio.ko
   AUTOLOAD:=$(call AutoLoad,18,pps-gpio,1)
 endef
 
@@ -1115,7 +1115,7 @@ define KernelPackage/pps-ldisc
   TITLE:=PPS line discipline
   DEPENDS:=+kmod-pps
   KCONFIG:=CONFIG_PPS_CLIENT_LDISC
-  FILES:=$(LINUX_DIR)/drivers/pps/clients/pps-ldisc.ko
+  FILES:=drivers/pps/clients/pps-ldisc.ko
   AUTOLOAD:=$(call AutoLoad,18,pps-ldisc,1)
 endef
 
@@ -1134,7 +1134,7 @@ define KernelPackage/ptp
   KCONFIG:= \
 	CONFIG_PTP_1588_CLOCK \
 	CONFIG_NET_PTP_CLASSIFY=y
-  FILES:=$(LINUX_DIR)/drivers/ptp/ptp.ko
+  FILES:=drivers/ptp/ptp.ko
   AUTOLOAD:=$(call AutoLoad,18,ptp,1)
 endef
 
@@ -1151,7 +1151,7 @@ define KernelPackage/ptp-qoriq
   TITLE:=Freescale QorIQ PTP support
   DEPENDS:=@(TARGET_mpc85xx||TARGET_qoriq) +kmod-ptp
   KCONFIG:=CONFIG_PTP_1588_CLOCK_QORIQ
-  FILES:=$(LINUX_DIR)/drivers/ptp/ptp-qoriq.ko
+  FILES:=drivers/ptp/ptp-qoriq.ko
   AUTOLOAD:=$(call AutoProbe,ptp-qoriq)
 endef
 
@@ -1167,7 +1167,7 @@ define KernelPackage/random-core
   SUBMENU:=$(OTHER_MENU)
   TITLE:=Hardware Random Number Generator Core support
   KCONFIG:=CONFIG_HW_RANDOM
-  FILES:=$(LINUX_DIR)/drivers/char/hw_random/rng-core.ko
+  FILES:=drivers/char/hw_random/rng-core.ko
 endef
 
 define KernelPackage/random-core/description
@@ -1213,7 +1213,7 @@ define KernelPackage/gpio-beeper
 	CONFIG_INPUT_MISC=y \
 	CONFIG_INPUT_GPIO_BEEPER
   FILES:= \
-	$(LINUX_DIR)/drivers/input/misc/gpio-beeper.ko
+	drivers/input/misc/gpio-beeper.ko
   AUTOLOAD:=$(call AutoLoad,50,gpio-beeper)
 endef
 
@@ -1228,7 +1228,7 @@ define KernelPackage/echo
   SUBMENU:=$(OTHER_MENU)
   TITLE:=Line Echo Canceller
   KCONFIG:=CONFIG_ECHO
-  FILES:=$(LINUX_DIR)/drivers/misc/echo/echo.ko
+  FILES:=drivers/misc/echo/echo.ko
   AUTOLOAD:=$(call AutoLoad,50,echo)
 endef
 
@@ -1246,7 +1246,7 @@ define KernelPackage/keys-encrypted
   DEPENDS:=@KERNEL_KEYS +kmod-crypto-cbc +kmod-crypto-hmac +kmod-crypto-rng \
            +kmod-crypto-sha256 +kmod-keys-trusted
   KCONFIG:=CONFIG_ENCRYPTED_KEYS
-  FILES:=$(LINUX_DIR)/security/keys/encrypted-keys/encrypted-keys.ko
+  FILES:=security/keys/encrypted-keys/encrypted-keys.ko
   AUTOLOAD:=$(call AutoLoad,01,encrypted-keys,1)
 endef
 
@@ -1266,7 +1266,7 @@ define KernelPackage/keys-trusted
   TITLE:=TPM trusted keys on kernel keyring
   DEPENDS:=@KERNEL_KEYS +kmod-crypto-hash +kmod-crypto-hmac +kmod-crypto-sha1 +kmod-tpm
   KCONFIG:=CONFIG_TRUSTED_KEYS
-  FILES:= $(LINUX_DIR)/security/keys/trusted-keys/trusted.ko
+  FILES:=security/keys/trusted-keys/trusted.ko
   AUTOLOAD:=$(call AutoLoad,01,trusted-keys,1)
 endef
 
@@ -1287,7 +1287,7 @@ define KernelPackage/tpm
   DEPENDS:= +kmod-random-core +kmod-asn1-decoder \
 	  +kmod-asn1-encoder +kmod-oid-registry
   KCONFIG:= CONFIG_TCG_TPM
-  FILES:= $(LINUX_DIR)/drivers/char/tpm/tpm.ko
+  FILES:=drivers/char/tpm/tpm.ko
   AUTOLOAD:=$(call AutoLoad,10,tpm,1)
 endef
 
@@ -1303,8 +1303,8 @@ define KernelPackage/tpm-tis
 	DEPENDS:= @TARGET_x86 +kmod-tpm
   KCONFIG:= CONFIG_TCG_TIS
   FILES:= \
-	$(LINUX_DIR)/drivers/char/tpm/tpm_tis.ko \
-	$(LINUX_DIR)/drivers/char/tpm/tpm_tis_core.ko
+	drivers/char/tpm/tpm_tis.ko \
+	drivers/char/tpm/tpm_tis_core.ko
   AUTOLOAD:=$(call AutoLoad,20,tpm_tis,1)
 endef
 
@@ -1322,7 +1322,7 @@ define KernelPackage/tpm-i2c-atmel
   TITLE:=TPM I2C Atmel Support
   DEPENDS:= +kmod-tpm +kmod-i2c-core
   KCONFIG:= CONFIG_TCG_TIS_I2C_ATMEL
-  FILES:= $(LINUX_DIR)/drivers/char/tpm/tpm_i2c_atmel.ko
+  FILES:=drivers/char/tpm/tpm_i2c_atmel.ko
   AUTOLOAD:=$(call AutoLoad,40,tpm_i2c_atmel,1)
 endef
 
@@ -1337,7 +1337,7 @@ define KernelPackage/tpm-i2c-infineon
   TITLE:= TPM I2C Infineon driver
   DEPENDS:= +kmod-tpm +kmod-i2c-core
   KCONFIG:= CONFIG_TCG_TIS_I2C_INFINEON
-  FILES:= $(LINUX_DIR)/drivers/char/tpm/tpm_i2c_infineon.ko
+  FILES:=drivers/char/tpm/tpm_i2c_infineon.ko
   AUTOLOAD:= $(call AutoLoad,40,tpm_i2c_infineon,1)
 endef
 
@@ -1354,7 +1354,7 @@ define KernelPackage/i6300esb-wdt
   DEPENDS:=@PCI_SUPPORT @!SMALL_FLASH
   KCONFIG:=CONFIG_I6300ESB_WDT \
 	   CONFIG_WATCHDOG_CORE=y
-  FILES:=$(LINUX_DIR)/drivers/$(WATCHDOG_DIR)/i6300esb.ko
+  FILES:=drivers/$(WATCHDOG_DIR)/i6300esb.ko
   AUTOLOAD:=$(call AutoLoad,50,i6300esb,1)
 endef
 
@@ -1371,7 +1371,7 @@ define KernelPackage/mhi-bus
   TITLE:=MHI bus
   KCONFIG:=CONFIG_MHI_BUS \
            CONFIG_MHI_BUS_DEBUG=y
-  FILES:=$(LINUX_DIR)/drivers/bus/mhi/host/mhi.ko
+  FILES:=drivers/bus/mhi/host/mhi.ko
   AUTOLOAD:=$(call AutoProbe,mhi)
 endef
 
@@ -1386,7 +1386,7 @@ define KernelPackage/mhi-pci-generic
   TITLE:=MHI PCI controller driver
   DEPENDS:=@PCI_SUPPORT +kmod-mhi-bus
   KCONFIG:=CONFIG_MHI_BUS_PCI_GENERIC
-  FILES:=$(LINUX_DIR)/drivers/bus/mhi/host/mhi_pci_generic.ko
+  FILES:=drivers/bus/mhi/host/mhi_pci_generic.ko
   AUTOLOAD:=$(call AutoProbe,mhi_pci_generic)
 endef
 

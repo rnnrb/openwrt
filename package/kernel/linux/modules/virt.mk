@@ -9,7 +9,7 @@ define KernelPackage/irqbypass
   TITLE:=IRQ offload/bypass manager
   KCONFIG:=CONFIG_IRQ_BYPASS_MANAGER
   HIDDEN:=1
-  FILES:= $(LINUX_DIR)/virt/lib/irqbypass.ko
+  FILES:=virt/lib/irqbypass.ko
   AUTOLOAD:=$(call AutoProbe,irqbypass.ko)
 endef
 $(eval $(call KernelPackage,irqbypass))
@@ -23,7 +23,7 @@ define KernelPackage/kvm-x86
 	  CONFIG_KVM \
 	  CONFIG_KVM_MMU_AUDIT=n \
 	  CONFIG_VIRTUALIZATION=y
-  FILES:= $(LINUX_DIR)/arch/$(LINUX_KARCH)/kvm/kvm.ko
+  FILES:=arch/$(LINUX_KARCH)/kvm/kvm.ko
   AUTOLOAD:=$(call AutoProbe,kvm.ko)
 endef
 
@@ -45,7 +45,7 @@ define KernelPackage/kvm-intel
   TITLE:=KVM for Intel processors support
   DEPENDS:=+kmod-kvm-x86
   KCONFIG:=CONFIG_KVM_INTEL
-  FILES:= $(LINUX_DIR)/arch/$(LINUX_KARCH)/kvm/kvm-intel.ko
+  FILES:=arch/$(LINUX_KARCH)/kvm/kvm-intel.ko
   AUTOLOAD:=$(call AutoProbe,kvm-intel.ko)
 endef
 
@@ -62,7 +62,7 @@ define KernelPackage/kvm-amd
   TITLE:=KVM for AMD processors support
   DEPENDS:=+kmod-kvm-x86
   KCONFIG:=CONFIG_KVM_AMD
-  FILES:= $(LINUX_DIR)/arch/$(LINUX_KARCH)/kvm/kvm-amd.ko
+  FILES:=arch/$(LINUX_KARCH)/kvm/kvm-amd.ko
   AUTOLOAD:=$(call AutoProbe,kvm-amd.ko)
 endef
 
@@ -83,9 +83,9 @@ define KernelPackage/vfio
 	CONFIG_VFIO_NOIOMMU=n \
 	CONFIG_VFIO_MDEV=n
   FILES:= \
-	$(LINUX_DIR)/drivers/vfio/vfio.ko \
-	$(LINUX_DIR)/drivers/vfio/vfio_virqfd.ko \
-	$(LINUX_DIR)/drivers/vfio/vfio_iommu_type1.ko
+	drivers/vfio/vfio.ko \
+	drivers/vfio/vfio_virqfd.ko \
+	drivers/vfio/vfio_iommu_type1.ko
   AUTOLOAD:=$(call AutoProbe,vfio vfio_iommu_type1 vfio_virqfd)
 endef
 
@@ -104,8 +104,8 @@ define KernelPackage/vfio-pci
 	CONFIG_VFIO_PCI \
 	CONFIG_VFIO_PCI_IGD=n
   FILES:= \
-	$(LINUX_DIR)/drivers/vfio/pci/vfio-pci-core.ko \
-	$(LINUX_DIR)/drivers/vfio/pci/vfio-pci.ko
+	drivers/vfio/pci/vfio-pci-core.ko \
+	drivers/vfio/pci/vfio-pci.ko
   AUTOLOAD:=$(call AutoProbe,vfio-pci)
 endef
 
@@ -121,8 +121,8 @@ define KernelPackage/vhost
   SUBMENU:=Virtualization
   TITLE:=Host kernel accelerator for virtio (base)
   KCONFIG:=CONFIG_VHOST
-  FILES:=$(LINUX_DIR)/drivers/vhost/vhost.ko \
-    $(LINUX_DIR)/drivers/vhost/vhost_iotlb.ko
+  FILES:=drivers/vhost/vhost.ko \
+    drivers/vhost/vhost_iotlb.ko
   AUTOLOAD:=$(call AutoProbe,vhost vhost_iotlb)
 endef
 
@@ -134,7 +134,7 @@ define KernelPackage/vhost-net
   TITLE:=Host kernel accelerator for virtio-net
   DEPENDS:=+kmod-tun +kmod-vhost
   KCONFIG:=CONFIG_VHOST_NET
-  FILES:=$(LINUX_DIR)/drivers/vhost/vhost_net.ko
+  FILES:=drivers/vhost/vhost_net.ko
   AUTOLOAD:=$(call AutoProbe,vhost_net)
 endef
 

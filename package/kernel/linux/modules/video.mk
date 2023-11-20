@@ -23,8 +23,8 @@ define KernelPackage/acpi-video
   HIDDEN:=1
   KCONFIG:=CONFIG_ACPI_VIDEO \
 	CONFIG_ACPI_WMI
-  FILES:=$(LINUX_DIR)/drivers/acpi/video.ko \
-	$(LINUX_DIR)/drivers/platform/x86/wmi.ko
+  FILES:=drivers/acpi/video.ko \
+	drivers/platform/x86/wmi.ko
   AUTOLOAD:=$(call AutoProbe,wmi video)
 endef
 
@@ -47,7 +47,7 @@ define KernelPackage/backlight
 		CONFIG_BACKLIGHT_ADP8870=n \
 		CONFIG_BACKLIGHT_OT200=n \
 		CONFIG_BACKLIGHT_PM8941_WLED=n
-	FILES:=$(LINUX_DIR)/drivers/video/backlight/backlight.ko
+	FILES:=drivers/video/backlight/backlight.ko
 	AUTOLOAD:=$(call AutoProbe,video backlight)
 endef
 
@@ -62,7 +62,7 @@ define KernelPackage/backlight-pwm
 	TITLE:=PWM Backlight support
 	DEPENDS:=+kmod-backlight
 	KCONFIG:=CONFIG_BACKLIGHT_PWM
-	FILES:=$(LINUX_DIR)/drivers/video/backlight/pwm_bl.ko
+	FILES:=drivers/video/backlight/pwm_bl.ko
 	AUTOLOAD:=$(call AutoProbe,video pwm_bl)
 endef
 
@@ -100,8 +100,8 @@ define KernelPackage/fb
 	CONFIG_CONSOLE_TRANSLATIONS=y \
 	CONFIG_VT_CONSOLE=y \
 	CONFIG_VT_HW_CONSOLE_BINDING=y
-  FILES:=$(LINUX_DIR)/drivers/video/fbdev/core/fb.ko \
-	$(LINUX_DIR)/lib/fonts/font.ko
+  FILES:=drivers/video/fbdev/core/fb.ko \
+	lib/fonts/font.ko
   AUTOLOAD:=$(call AutoLoad,06,fb font)
 endef
 
@@ -110,7 +110,7 @@ define KernelPackage/fb/description
 endef
 
 define KernelPackage/fb/x86
-  FILES+=$(LINUX_DIR)/arch/x86/video/fbdev.ko
+  FILES+=arch/x86/video/fbdev.ko
   AUTOLOAD:=$(call AutoLoad,06,fbdev fb font)
 endef
 
@@ -122,7 +122,7 @@ define KernelPackage/fb-cfb-fillrect
   TITLE:=Framebuffer software rectangle filling support
   DEPENDS:=+kmod-fb
   KCONFIG:=CONFIG_FB_CFB_FILLRECT
-  FILES:=$(LINUX_DIR)/drivers/video/fbdev/core/cfbfillrect.ko
+  FILES:=drivers/video/fbdev/core/cfbfillrect.ko
   AUTOLOAD:=$(call AutoLoad,07,cfbfillrect)
 endef
 
@@ -138,7 +138,7 @@ define KernelPackage/fb-cfb-copyarea
   TITLE:=Framebuffer software copy area support
   DEPENDS:=+kmod-fb
   KCONFIG:=CONFIG_FB_CFB_COPYAREA
-  FILES:=$(LINUX_DIR)/drivers/video/fbdev/core/cfbcopyarea.ko
+  FILES:=drivers/video/fbdev/core/cfbcopyarea.ko
   AUTOLOAD:=$(call AutoLoad,07,cfbcopyarea)
 endef
 
@@ -153,7 +153,7 @@ define KernelPackage/fb-cfb-imgblt
   TITLE:=Framebuffer software image blit support
   DEPENDS:=+kmod-fb
   KCONFIG:=CONFIG_FB_CFB_IMAGEBLIT
-  FILES:=$(LINUX_DIR)/drivers/video/fbdev/core/cfbimgblt.ko
+  FILES:=drivers/video/fbdev/core/cfbimgblt.ko
   AUTOLOAD:=$(call AutoLoad,07,cfbimgblt)
 endef
 
@@ -169,7 +169,7 @@ define KernelPackage/fb-sys-fops
   TITLE:=Framebuffer software sys ops support
   DEPENDS:=+kmod-fb
   KCONFIG:=CONFIG_FB_SYS_FOPS
-  FILES:=$(LINUX_DIR)/drivers/video/fbdev/core/fb_sys_fops.ko
+  FILES:=drivers/video/fbdev/core/fb_sys_fops.ko
   AUTOLOAD:=$(call AutoLoad,07,fb_sys_fops)
 endef
 
@@ -189,9 +189,9 @@ define KernelPackage/fb-sys-ram
 	CONFIG_FB_SYS_FILLRECT \
 	CONFIG_FB_SYS_IMAGEBLIT
   FILES:= \
-	$(LINUX_DIR)/drivers/video/fbdev/core/syscopyarea.ko \
-	$(LINUX_DIR)/drivers/video/fbdev/core/sysfillrect.ko \
-	$(LINUX_DIR)/drivers/video/fbdev/core/sysimgblt.ko
+	drivers/video/fbdev/core/syscopyarea.ko \
+	drivers/video/fbdev/core/sysfillrect.ko \
+	drivers/video/fbdev/core/sysimgblt.ko
   AUTOLOAD:=$(call AutoLoad,07,syscopyarea sysfillrect sysimgblt)
 endef
 
@@ -213,7 +213,7 @@ define KernelPackage/fb-tft
        CONFIG_FB_DEFERRED_IO=y \
        CONFIG_FB_TFT
   FILES:= \
-       $(LINUX_DIR)/drivers/staging/fbtft/fbtft.ko
+       drivers/staging/fbtft/fbtft.ko
   AUTOLOAD:=$(call AutoLoad,08,fbtft)
 endef
 
@@ -229,7 +229,7 @@ define KernelPackage/fb-tft-ili9486
   TITLE:=FB driver for the ILI9486 LCD Controller
   DEPENDS:=+kmod-fb-tft
   KCONFIG:=CONFIG_FB_TFT_ILI9486
-  FILES:=$(LINUX_DIR)/drivers/staging/fbtft/fb_ili9486.ko
+  FILES:=drivers/staging/fbtft/fb_ili9486.ko
   AUTOLOAD:=$(call AutoLoad,09,fb_ili9486)
 endef
 
@@ -248,8 +248,8 @@ define KernelPackage/drm
 	+kmod-fb
   KCONFIG:=CONFIG_DRM
   FILES:= \
-	$(LINUX_DIR)/drivers/gpu/drm/drm.ko \
-	$(LINUX_DIR)/drivers/gpu/drm/drm_panel_orientation_quirks.ko
+	drivers/gpu/drm/drm.ko \
+	drivers/gpu/drm/drm_panel_orientation_quirks.ko
   AUTOLOAD:=$(call AutoLoad,05,drm)
 endef
 
@@ -264,7 +264,7 @@ define KernelPackage/drm-buddy
   TITLE:=A page based buddy allocator
   DEPENDS:=@DISPLAY_SUPPORT +kmod-drm @LINUX_6_1
   KCONFIG:=CONFIG_DRM_BUDDY
-  FILES:= $(LINUX_DIR)/drivers/gpu/drm/drm_buddy.ko
+  FILES:=drivers/gpu/drm/drm_buddy.ko
   AUTOLOAD:=$(call AutoProbe,drm_buddy)
 endef
 
@@ -279,7 +279,7 @@ define KernelPackage/drm-display-helper
   TITLE:=DRM helpers for display adapters drivers
   DEPENDS:=@DISPLAY_SUPPORT +kmod-drm-kms-helper @LINUX_6_1
   KCONFIG:=CONFIG_DRM_DISPLAY_HELPER
-  FILES:=$(LINUX_DIR)/drivers/gpu/drm/display/drm_display_helper.ko
+  FILES:=drivers/gpu/drm/display/drm_display_helper.ko
   AUTOLOAD:=$(call AutoProbe,drm_display_helper)
 endef
 
@@ -294,7 +294,7 @@ define KernelPackage/drm-ttm
   TITLE:=GPU memory management subsystem
   DEPENDS:=@DISPLAY_SUPPORT +kmod-drm
   KCONFIG:=CONFIG_DRM_TTM
-  FILES:=$(LINUX_DIR)/drivers/gpu/drm/ttm/ttm.ko
+  FILES:=drivers/gpu/drm/ttm/ttm.ko
   AUTOLOAD:=$(call AutoProbe,ttm)
 endef
 
@@ -312,7 +312,7 @@ define KernelPackage/drm-ttm-helper
   HIDDEN:=1
   DEPENDS:=@DISPLAY_SUPPORT +kmod-drm-ttm
   KCONFIG:=CONFIG_DRM_TTM_HELPER
-  FILES:=$(LINUX_DIR)/drivers/gpu/drm/drm_ttm_helper.ko
+  FILES:=drivers/gpu/drm/drm_ttm_helper.ko
   AUTOLOAD:=$(call AutoProbe,drm_ttm_helper)
 endef
 
@@ -327,7 +327,7 @@ define KernelPackage/drm-kms-helper
   KCONFIG:= \
     CONFIG_DRM_KMS_HELPER \
     CONFIG_DRM_KMS_FB_HELPER=y
-  FILES:=$(LINUX_DIR)/drivers/gpu/drm/drm_kms_helper.ko
+  FILES:=drivers/gpu/drm/drm_kms_helper.ko
   AUTOLOAD:=$(call AutoProbe,drm_kms_helper)
 endef
 
@@ -348,8 +348,8 @@ define KernelPackage/drm-amdgpu
 	CONFIG_DRM_AMDGPU_CIK=y \
 	CONFIG_DRM_AMD_DC=y \
 	CONFIG_DEBUG_KERNEL_DC=n
-  FILES:=$(LINUX_DIR)/drivers/gpu/drm/amd/amdgpu/amdgpu.ko \
-	$(LINUX_DIR)/drivers/gpu/drm/scheduler/gpu-sched.ko
+  FILES:=drivers/gpu/drm/amd/amdgpu/amdgpu.ko \
+	drivers/gpu/drm/scheduler/gpu-sched.ko
   AUTOLOAD:=$(call AutoProbe,amdgpu)
 endef
 
@@ -379,8 +379,8 @@ define KernelPackage/drm-imx
 	CONFIG_DRM_IMX_LDB=n \
 	CONFIG_DRM_IMX_HDMI=n
   FILES:= \
-	$(LINUX_DIR)/drivers/gpu/drm/imx/imxdrm.ko \
-	$(LINUX_DIR)/drivers/gpu/ipu-v3/imx-ipu-v3.ko
+	drivers/gpu/drm/imx/imxdrm.ko \
+	drivers/gpu/ipu-v3/imx-ipu-v3.ko
   AUTOLOAD:=$(call AutoLoad,08,imxdrm imx-ipu-v3 imx-ipuv3-crtc)
 endef
 
@@ -398,9 +398,9 @@ define KernelPackage/drm-imx-hdmi
 	CONFIG_DRM_DW_HDMI_AHB_AUDIO \
 	CONFIG_DRM_DW_HDMI_I2S_AUDIO
   FILES:= \
-	$(LINUX_DIR)/drivers/gpu/drm/bridge/synopsys/dw-hdmi.ko \
-	$(LINUX_DIR)/drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.ko \
-	$(LINUX_DIR)/drivers/gpu/drm/imx/dw_hdmi-imx.ko
+	drivers/gpu/drm/bridge/synopsys/dw-hdmi.ko \
+	drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.ko \
+	drivers/gpu/drm/imx/dw_hdmi-imx.ko
   AUTOLOAD:=$(call AutoLoad,08,dw-hdmi dw-hdmi-ahb-audio.ko dw_hdmi-imx)
 endef
 
@@ -424,9 +424,9 @@ define KernelPackage/drm-imx-ldb
 	CONFIG_DRM_PANEL_LVDS=n \
 	CONFIG_DRM_PANEL_S6E8AA0=n \
 	CONFIG_DRM_PANEL_SITRONIX_ST7789V=n
-  FILES:=$(LINUX_DIR)/drivers/gpu/drm/imx/imx-ldb.ko \
-	$(LINUX_DIR)/drivers/gpu/drm/panel/panel-simple.ko \
-	$(LINUX_DIR)/drivers/gpu/drm/drm_dp_aux_bus.ko
+  FILES:=drivers/gpu/drm/imx/imx-ldb.ko \
+	drivers/gpu/drm/panel/panel-simple.ko \
+	drivers/gpu/drm/drm_dp_aux_bus.ko
   AUTOLOAD:=$(call AutoLoad,08,imx-ldb)
 endef
 
@@ -443,7 +443,7 @@ define KernelPackage/drm-radeon
 	+kmod-drm-ttm +kmod-drm-ttm-helper +kmod-i2c-algo-bit +radeon-firmware \
 	+kmod-drm-display-helper +kmod-acpi-video
   KCONFIG:=CONFIG_DRM_RADEON
-  FILES:=$(LINUX_DIR)/drivers/gpu/drm/radeon/radeon.ko
+  FILES:=drivers/gpu/drm/radeon/radeon.ko
   AUTOLOAD:=$(call AutoProbe,radeon)
 endef
 
@@ -467,7 +467,7 @@ define KernelPackage/video-core
 	CONFIG_VIDEO_DEV \
 	CONFIG_V4L_PLATFORM_DRIVERS=y
   FILES:= \
-	$(LINUX_DIR)/drivers/media/$(V4L2_DIR)/videodev.ko
+	drivers/media/$(V4L2_DIR)/videodev.ko
   AUTOLOAD:=$(call AutoLoad,60, videodev v4l2-common)
 endef
 
@@ -502,10 +502,10 @@ define KernelPackage/video-videobuf2
 	CONFIG_VIDEOBUF2_MEMOPS \
 	CONFIG_VIDEOBUF2_VMALLOC
   FILES:= \
-	$(LINUX_DIR)/drivers/media/common/videobuf2/videobuf2-common.ko \
-	$(LINUX_DIR)/drivers/media/common/videobuf2/videobuf2-v4l2.ko \
-	$(LINUX_DIR)/drivers/media/common/videobuf2/videobuf2-memops.ko \
-	$(LINUX_DIR)/drivers/media/common/videobuf2/videobuf2-vmalloc.ko
+	drivers/media/common/videobuf2/videobuf2-common.ko \
+	drivers/media/common/videobuf2/videobuf2-v4l2.ko \
+	drivers/media/common/videobuf2/videobuf2-memops.ko \
+	drivers/media/common/videobuf2/videobuf2-vmalloc.ko
   AUTOLOAD:=$(call AutoLoad,65,videobuf2-core videobuf-v4l2 videobuf2-memops videobuf2-vmalloc)
   $(call AddDepends/video)
 endef
@@ -521,7 +521,7 @@ define KernelPackage/video-cpia2
   TITLE:=CPIA2 video driver
   DEPENDS:=@USB_SUPPORT +kmod-usb-core
   KCONFIG:=CONFIG_VIDEO_CPIA2
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/cpia2/cpia2.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/cpia2/cpia2.ko
   AUTOLOAD:=$(call AutoProbe,cpia2)
   $(call AddDepends/camera)
 endef
@@ -539,7 +539,7 @@ define KernelPackage/video-pwc
   KCONFIG:= \
 	CONFIG_USB_PWC \
 	CONFIG_USB_PWC_DEBUG=n
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/pwc/pwc.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/pwc/pwc.ko
   AUTOLOAD:=$(call AutoProbe,pwc)
   $(call AddDepends/camera)
 endef
@@ -555,7 +555,7 @@ define KernelPackage/video-uvc
   TITLE:=USB Video Class (UVC) support
   DEPENDS:=@USB_SUPPORT +kmod-usb-core +kmod-video-videobuf2 +kmod-input-core
   KCONFIG:= CONFIG_USB_VIDEO_CLASS
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/uvc/uvcvideo.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/uvc/uvcvideo.ko
   AUTOLOAD:=$(call AutoProbe,uvcvideo)
   $(call AddDepends/camera)
 endef
@@ -572,7 +572,7 @@ define KernelPackage/video-gspca-core
   TITLE:=GSPCA webcam core support framework
   DEPENDS:=@USB_SUPPORT +kmod-usb-core +kmod-input-core +kmod-video-videobuf2
   KCONFIG:=CONFIG_USB_GSPCA
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_main.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_main.ko
   AUTOLOAD:=$(call AutoProbe,gspca_main)
   $(call AddDepends/camera)
 endef
@@ -594,7 +594,7 @@ endef
 define KernelPackage/video-gspca-conex
   TITLE:=conex webcam support
   KCONFIG:=CONFIG_USB_GSPCA_CONEX
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_conex.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_conex.ko
   AUTOLOAD:=$(call AutoProbe,gspca_conex)
   $(call AddDepends/camera-gspca)
 endef
@@ -609,7 +609,7 @@ $(eval $(call KernelPackage,video-gspca-conex))
 define KernelPackage/video-gspca-etoms
   TITLE:=etoms webcam support
   KCONFIG:=CONFIG_USB_GSPCA_ETOMS
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_etoms.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_etoms.ko
   AUTOLOAD:=$(call AutoProbe,gspca_etoms)
   $(call AddDepends/camera-gspca)
 endef
@@ -624,7 +624,7 @@ $(eval $(call KernelPackage,video-gspca-etoms))
 define KernelPackage/video-gspca-finepix
   TITLE:=finepix webcam support
   KCONFIG:=CONFIG_USB_GSPCA_FINEPIX
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_finepix.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_finepix.ko
   AUTOLOAD:=$(call AutoProbe,gspca_finepix)
   $(call AddDepends/camera-gspca)
 endef
@@ -639,7 +639,7 @@ $(eval $(call KernelPackage,video-gspca-finepix))
 define KernelPackage/video-gspca-mars
   TITLE:=mars webcam support
   KCONFIG:=CONFIG_USB_GSPCA_MARS
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_mars.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_mars.ko
   AUTOLOAD:=$(call AutoProbe,gspca_mars)
   $(call AddDepends/camera-gspca)
 endef
@@ -654,7 +654,7 @@ $(eval $(call KernelPackage,video-gspca-mars))
 define KernelPackage/video-gspca-mr97310a
   TITLE:=mr97310a webcam support
   KCONFIG:=CONFIG_USB_GSPCA_MR97310A
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_mr97310a.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_mr97310a.ko
   AUTOLOAD:=$(call AutoProbe,gspca_mr97310a)
   $(call AddDepends/camera-gspca)
 endef
@@ -669,7 +669,7 @@ $(eval $(call KernelPackage,video-gspca-mr97310a))
 define KernelPackage/video-gspca-ov519
   TITLE:=ov519 webcam support
   KCONFIG:=CONFIG_USB_GSPCA_OV519
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_ov519.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_ov519.ko
   AUTOLOAD:=$(call AutoProbe,gspca_ov519)
   $(call AddDepends/camera-gspca)
 endef
@@ -684,7 +684,7 @@ $(eval $(call KernelPackage,video-gspca-ov519))
 define KernelPackage/video-gspca-ov534
   TITLE:=ov534 webcam support
   KCONFIG:=CONFIG_USB_GSPCA_OV534
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_ov534.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_ov534.ko
   AUTOLOAD:=$(call AutoProbe,gspca_ov534)
   $(call AddDepends/camera-gspca)
 endef
@@ -699,7 +699,7 @@ $(eval $(call KernelPackage,video-gspca-ov534))
 define KernelPackage/video-gspca-ov534-9
   TITLE:=ov534-9 webcam support
   KCONFIG:=CONFIG_USB_GSPCA_OV534_9
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_ov534_9.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_ov534_9.ko
   AUTOLOAD:=$(call AutoProbe,gspca_ov534_9)
   $(call AddDepends/camera-gspca)
 endef
@@ -714,7 +714,7 @@ $(eval $(call KernelPackage,video-gspca-ov534-9))
 define KernelPackage/video-gspca-pac207
   TITLE:=pac207 webcam support
   KCONFIG:=CONFIG_USB_GSPCA_PAC207
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_pac207.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_pac207.ko
   AUTOLOAD:=$(call AutoProbe,gspca_pac207)
   $(call AddDepends/camera-gspca)
 endef
@@ -729,7 +729,7 @@ $(eval $(call KernelPackage,video-gspca-pac207))
 define KernelPackage/video-gspca-pac7311
   TITLE:=pac7311 webcam support
   KCONFIG:=CONFIG_USB_GSPCA_PAC7311
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_pac7311.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_pac7311.ko
   AUTOLOAD:=$(call AutoProbe,gspca_pac7311)
   $(call AddDepends/camera-gspca)
 endef
@@ -744,7 +744,7 @@ $(eval $(call KernelPackage,video-gspca-pac7311))
 define KernelPackage/video-gspca-se401
   TITLE:=se401 webcam support
   KCONFIG:=CONFIG_USB_GSPCA_SE401
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_se401.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_se401.ko
   AUTOLOAD:=$(call AutoProbe,gspca_se401)
   $(call AddDepends/camera-gspca)
 endef
@@ -759,7 +759,7 @@ $(eval $(call KernelPackage,video-gspca-se401))
 define KernelPackage/video-gspca-sn9c20x
   TITLE:=sn9c20x webcam support
   KCONFIG:=CONFIG_USB_GSPCA_SN9C20X
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_sn9c20x.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_sn9c20x.ko
   AUTOLOAD:=$(call AutoProbe,gspca_sn9c20x)
   $(call AddDepends/camera-gspca)
 endef
@@ -774,7 +774,7 @@ $(eval $(call KernelPackage,video-gspca-sn9c20x))
 define KernelPackage/video-gspca-sonixb
   TITLE:=sonixb webcam support
   KCONFIG:=CONFIG_USB_GSPCA_SONIXB
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_sonixb.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_sonixb.ko
   AUTOLOAD:=$(call AutoProbe,gspca_sonixb)
   $(call AddDepends/camera-gspca)
 endef
@@ -789,7 +789,7 @@ $(eval $(call KernelPackage,video-gspca-sonixb))
 define KernelPackage/video-gspca-sonixj
   TITLE:=sonixj webcam support
   KCONFIG:=CONFIG_USB_GSPCA_SONIXJ
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_sonixj.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_sonixj.ko
   AUTOLOAD:=$(call AutoProbe,gspca_sonixj)
   $(call AddDepends/camera-gspca)
 endef
@@ -804,7 +804,7 @@ $(eval $(call KernelPackage,video-gspca-sonixj))
 define KernelPackage/video-gspca-spca500
   TITLE:=spca500 webcam support
   KCONFIG:=CONFIG_USB_GSPCA_SPCA500
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_spca500.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_spca500.ko
   AUTOLOAD:=$(call AutoProbe,gspca_spca500)
   $(call AddDepends/camera-gspca)
 endef
@@ -819,7 +819,7 @@ $(eval $(call KernelPackage,video-gspca-spca500))
 define KernelPackage/video-gspca-spca501
   TITLE:=spca501 webcam support
   KCONFIG:=CONFIG_USB_GSPCA_SPCA501
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_spca501.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_spca501.ko
   AUTOLOAD:=$(call AutoProbe,gspca_spca501)
   $(call AddDepends/camera-gspca)
 endef
@@ -834,7 +834,7 @@ $(eval $(call KernelPackage,video-gspca-spca501))
 define KernelPackage/video-gspca-spca505
   TITLE:=spca505 webcam support
   KCONFIG:=CONFIG_USB_GSPCA_SPCA505
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_spca505.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_spca505.ko
   AUTOLOAD:=$(call AutoProbe,gspca_spca505)
   $(call AddDepends/camera-gspca)
 endef
@@ -849,7 +849,7 @@ $(eval $(call KernelPackage,video-gspca-spca505))
 define KernelPackage/video-gspca-spca506
   TITLE:=spca506 webcam support
   KCONFIG:=CONFIG_USB_GSPCA_SPCA506
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_spca506.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_spca506.ko
   AUTOLOAD:=$(call AutoProbe,gspca_spca506)
   $(call AddDepends/camera-gspca)
 endef
@@ -864,7 +864,7 @@ $(eval $(call KernelPackage,video-gspca-spca506))
 define KernelPackage/video-gspca-spca508
   TITLE:=spca508 webcam support
   KCONFIG:=CONFIG_USB_GSPCA_SPCA508
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_spca508.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_spca508.ko
   AUTOLOAD:=$(call AutoProbe,gspca_spca508)
   $(call AddDepends/camera-gspca)
 endef
@@ -879,7 +879,7 @@ $(eval $(call KernelPackage,video-gspca-spca508))
 define KernelPackage/video-gspca-spca561
   TITLE:=spca561 webcam support
   KCONFIG:=CONFIG_USB_GSPCA_SPCA561
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_spca561.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_spca561.ko
   AUTOLOAD:=$(call AutoProbe,gspca_spca561)
   $(call AddDepends/camera-gspca)
 endef
@@ -894,7 +894,7 @@ $(eval $(call KernelPackage,video-gspca-spca561))
 define KernelPackage/video-gspca-sq905
   TITLE:=sq905 webcam support
   KCONFIG:=CONFIG_USB_GSPCA_SQ905
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_sq905.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_sq905.ko
   AUTOLOAD:=$(call AutoProbe,gspca_sq905)
   $(call AddDepends/camera-gspca)
 endef
@@ -909,7 +909,7 @@ $(eval $(call KernelPackage,video-gspca-sq905))
 define KernelPackage/video-gspca-sq905c
   TITLE:=sq905c webcam support
   KCONFIG:=CONFIG_USB_GSPCA_SQ905C
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_sq905c.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_sq905c.ko
   AUTOLOAD:=$(call AutoProbe,gspca_sq905c)
   $(call AddDepends/camera-gspca)
 endef
@@ -924,7 +924,7 @@ $(eval $(call KernelPackage,video-gspca-sq905c))
 define KernelPackage/video-gspca-sq930x
   TITLE:=sq930x webcam support
   KCONFIG:=CONFIG_USB_GSPCA_SQ930X
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_sq930x.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_sq930x.ko
   AUTOLOAD:=$(call AutoProbe,gspca_sq930x)
   $(call AddDepends/camera-gspca)
 endef
@@ -939,7 +939,7 @@ $(eval $(call KernelPackage,video-gspca-sq930x))
 define KernelPackage/video-gspca-stk014
   TITLE:=stk014 webcam support
   KCONFIG:=CONFIG_USB_GSPCA_STK014
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_stk014.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_stk014.ko
   AUTOLOAD:=$(call AutoProbe,gspca_stk014)
   $(call AddDepends/camera-gspca)
 endef
@@ -954,7 +954,7 @@ $(eval $(call KernelPackage,video-gspca-stk014))
 define KernelPackage/video-gspca-sunplus
   TITLE:=sunplus webcam support
   KCONFIG:=CONFIG_USB_GSPCA_SUNPLUS
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_sunplus.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_sunplus.ko
   AUTOLOAD:=$(call AutoProbe,gspca_sunplus)
   $(call AddDepends/camera-gspca)
 endef
@@ -969,7 +969,7 @@ $(eval $(call KernelPackage,video-gspca-sunplus))
 define KernelPackage/video-gspca-t613
   TITLE:=t613 webcam support
   KCONFIG:=CONFIG_USB_GSPCA_T613
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_t613.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_t613.ko
   AUTOLOAD:=$(call AutoProbe,gspca_t613)
   $(call AddDepends/camera-gspca)
 endef
@@ -984,7 +984,7 @@ $(eval $(call KernelPackage,video-gspca-t613))
 define KernelPackage/video-gspca-tv8532
   TITLE:=tv8532 webcam support
   KCONFIG:=CONFIG_USB_GSPCA_TV8532
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_tv8532.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_tv8532.ko
   AUTOLOAD:=$(call AutoProbe,gspca_tv8532)
   $(call AddDepends/camera-gspca)
 endef
@@ -999,7 +999,7 @@ $(eval $(call KernelPackage,video-gspca-tv8532))
 define KernelPackage/video-gspca-vc032x
   TITLE:=vc032x webcam support
   KCONFIG:=CONFIG_USB_GSPCA_VC032X
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_vc032x.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_vc032x.ko
   AUTOLOAD:=$(call AutoProbe,gspca_vc032x)
   $(call AddDepends/camera-gspca)
 endef
@@ -1014,7 +1014,7 @@ $(eval $(call KernelPackage,video-gspca-vc032x))
 define KernelPackage/video-gspca-zc3xx
   TITLE:=zc3xx webcam support
   KCONFIG:=CONFIG_USB_GSPCA_ZC3XX
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_zc3xx.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_zc3xx.ko
   AUTOLOAD:=$(call AutoProbe,gspca_zc3xx)
   $(call AddDepends/camera-gspca)
 endef
@@ -1029,7 +1029,7 @@ $(eval $(call KernelPackage,video-gspca-zc3xx))
 define KernelPackage/video-gspca-m5602
   TITLE:=m5602 webcam support
   KCONFIG:=CONFIG_USB_M5602
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/m5602/gspca_m5602.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/m5602/gspca_m5602.ko
   AUTOLOAD:=$(call AutoProbe,gspca_m5602)
   $(call AddDepends/camera-gspca)
 endef
@@ -1044,7 +1044,7 @@ $(eval $(call KernelPackage,video-gspca-m5602))
 define KernelPackage/video-gspca-stv06xx
   TITLE:=stv06xx webcam support
   KCONFIG:=CONFIG_USB_STV06XX
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/stv06xx/gspca_stv06xx.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/stv06xx/gspca_stv06xx.ko
   AUTOLOAD:=$(call AutoProbe,gspca_stv06xx)
   $(call AddDepends/camera-gspca)
 endef
@@ -1059,7 +1059,7 @@ $(eval $(call KernelPackage,video-gspca-stv06xx))
 define KernelPackage/video-gspca-gl860
   TITLE:=gl860 webcam support
   KCONFIG:=CONFIG_USB_GL860
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gl860/gspca_gl860.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gl860/gspca_gl860.ko
   AUTOLOAD:=$(call AutoProbe,gspca_gl860)
   $(call AddDepends/camera-gspca)
 endef
@@ -1074,7 +1074,7 @@ $(eval $(call KernelPackage,video-gspca-gl860))
 define KernelPackage/video-gspca-jeilinj
   TITLE:=jeilinj webcam support
   KCONFIG:=CONFIG_USB_GSPCA_JEILINJ
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_jeilinj.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_jeilinj.ko
   AUTOLOAD:=$(call AutoProbe,gspca_jeilinj)
   $(call AddDepends/camera-gspca)
 endef
@@ -1089,7 +1089,7 @@ $(eval $(call KernelPackage,video-gspca-jeilinj))
 define KernelPackage/video-gspca-konica
   TITLE:=konica webcam support
   KCONFIG:=CONFIG_USB_GSPCA_KONICA
-  FILES:=$(LINUX_DIR)/drivers/media/$(V4L2_USB_DIR)/gspca/gspca_konica.ko
+  FILES:=drivers/media/$(V4L2_USB_DIR)/gspca/gspca_konica.ko
   AUTOLOAD:=$(call AutoProbe,gspca_konica)
   $(call AddDepends/camera-gspca)
 endef
@@ -1110,7 +1110,7 @@ define KernelPackage/video-mem2mem
   HIDDEN:=1
   DEPENDS:=+kmod-video-videobuf2
   KCONFIG:= CONFIG_V4L_MEM2MEM_DRIVERS=y
-  FILES:= $(LINUX_DIR)/drivers/media/$(V4L2_DIR)/v4l2-mem2mem.ko
+  FILES:=drivers/media/$(V4L2_DIR)/v4l2-mem2mem.ko
   AUTOLOAD:=$(call AutoLoad,66,v4l2-mem2mem)
   $(call AddDepends/video)
 endef
@@ -1130,8 +1130,8 @@ define KernelPackage/video-dma
 	CONFIG_VIDEOBUF2_DMA_CONTIG \
 	CONFIG_VIDEOBUF2_DMA_SG
   FILES:= \
-	$(LINUX_DIR)/drivers/media/common/videobuf2/videobuf2-dma-contig.ko \
-	-$(LINUX_DIR)/drivers/media/common/videobuf2/videobuf2-dma-sg.ko
+	drivers/media/common/videobuf2/videobuf2-dma-contig.ko \
+	-drivers/media/common/videobuf2/videobuf2-dma-sg.ko
   AUTOLOAD:=$(call AutoLoad,66,videobuf2-dma-contig videobuf2-dma-sg)
   $(call AddDepends/video)
 endef
@@ -1149,9 +1149,9 @@ define KernelPackage/video-coda
   	CONFIG_VIDEO_CODA \
   	CONFIG_VIDEO_IMX_VDOA
   FILES:= \
-  	$(LINUX_DIR)/drivers/media/$(V4L2_MEM2MEM_DIR)/coda/coda-vpu.ko \
-  	$(LINUX_DIR)/drivers/media/$(V4L2_MEM2MEM_DIR)/coda/imx-vdoa.ko \
- 	$(LINUX_DIR)/drivers/media/$(V4L2_DIR)/v4l2-jpeg.ko
+  	drivers/media/$(V4L2_MEM2MEM_DIR)/coda/coda-vpu.ko \
+  	drivers/media/$(V4L2_MEM2MEM_DIR)/coda/imx-vdoa.ko \
+ 	drivers/media/$(V4L2_DIR)/v4l2-jpeg.ko
   AUTOLOAD:=$(call AutoProbe,coda-vpu imx-vdoa v4l2-jpeg)
   $(call AddDepends/video)
 endef
@@ -1166,7 +1166,7 @@ define KernelPackage/video-pxp
   TITLE:=i.MX PXP support
   DEPENDS:=@TARGET_imx +kmod-video-mem2mem +kmod-video-dma
   KCONFIG:= CONFIG_VIDEO_IMX_PXP
-  FILES:= $(LINUX_DIR)/drivers/media/$(V4L2_MEM2MEM_DIR)/imx-pxp.ko
+  FILES:=drivers/media/$(V4L2_MEM2MEM_DIR)/imx-pxp.ko
   AUTOLOAD:=$(call AutoProbe,imx-pxp)
   $(call AddDepends/video)
 endef
@@ -1183,7 +1183,7 @@ define KernelPackage/video-tw686x
   TITLE:=TW686x support
   DEPENDS:=@PCIE_SUPPORT +kmod-video-dma +kmod-sound-core
   KCONFIG:= CONFIG_VIDEO_TW686X
-  FILES:= $(LINUX_DIR)/drivers/media/pci/tw686x/tw686x.ko
+  FILES:=drivers/media/pci/tw686x/tw686x.ko
   AUTOLOAD:=$(call AutoProbe,tw686x)
   MODPARAMS.tw686x:=dma_mode=contig
   $(call AddDepends/framegrabber)
