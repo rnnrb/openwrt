@@ -244,16 +244,17 @@ $(call KernelPackage/$(1)/config)
     define Package/kmod-$(1)/install
 		  @for entr in $$(call version_filter,$$(FILES)); do \
 			mod="$$$$$$$${entr#-}"; \
-			if grep -q -e"$$$$$$$$mod" -e"$$$$$$$${mod##$(LINUX_DIR)/}" '$(LINUX_DIR)/modules.builtin'; then \
+			if grep -q -e"$$$$$$$$mod" '$(LINUX_DIR)/modules.builtin'; then \
 				echo "NOTICE: module '$$$$$$$$mod' is built-in."; \
 	$(if $(KCONFIG), \
 			elif [ -e "$(LINUX_DIR)/$$$$$$$$mod" ]; then \
 				mkdir -p '$$(1)/$(MODULES_SUBDIR)' ; \
 				$(CP) -l -L "$(LINUX_DIR)/$$$$$$$$mod" '$$(1)/$(MODULES_SUBDIR)/' ; \
-	) \
+	, \
 			elif [ -e "$$$$$$$$mod" ]; then \
 				mkdir -p '$$(1)/$(MODULES_SUBDIR)' ; \
 				$(CP) -l -L "$$$$$$$$mod" '$$(1)/$(MODULES_SUBDIR)/' ; \
+	) \
 			elif [ -z "$$$$$$$${entr%%-*}" ]; then \
 				echo "NOTICE: module '$$$$$$$$mod' skipped."; \
 			else \
