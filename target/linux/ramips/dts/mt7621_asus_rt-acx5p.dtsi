@@ -77,9 +77,22 @@
 			label = "u-boot-env";
 			reg = <0xe0000 0x100000>;
 			read-only;
+
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			partition@0 {
+				compatible = "u-boot,env";
+				label = "env-data";
+				reg = <0x00000 0x20000>;
+
+				macaddr_uboot_et1: et1macaddr {
+				};
+			};
 		};
 
-		factory: partition@1e0000 {
+		partition@1e0000 {
 			label = "factory";
 			reg = <0x1e0000 0x100000>;
 			read-only;
@@ -103,7 +116,7 @@
 			};
 		};
 
-		factory2: partition@2e0000 {
+		partition@2e0000 {
 			label = "factory2";
 			reg = <0x2e0000 0x100000>;
 			read-only;
@@ -160,7 +173,7 @@
 	label = "wan";
 	phy-handle = <&ethphy0>;
 
-	nvmem-cells = <&macaddr_factory_e000>;
+	nvmem-cells = <&macaddr_uboot_et1>;
 	nvmem-cell-names = "mac-address";
 };
 
