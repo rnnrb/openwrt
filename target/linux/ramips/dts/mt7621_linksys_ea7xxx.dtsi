@@ -95,6 +95,16 @@
 		partition@80000 {
 			label = "u_env";
 			reg = <0x80000 0x40000>;
+
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			partition@0 {
+				compatible = "u-boot,env";
+				label = "u-boot,env";
+				reg = <0x00000 0x20000>;
+			};
 		};
 
 		factory: partition@c0000 {

@@ -102,6 +102,7 @@
 			};
 
 			partition@30000 {
+				compatible = "u-boot,env";
 				label = "Config";
 				reg = <0x30000 0x10000>;
 				read-only;

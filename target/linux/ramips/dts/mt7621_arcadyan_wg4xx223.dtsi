@@ -76,9 +76,19 @@
 		partition@100000 {
 			label = "u-boot-env";
 			reg = <0x100000 0x100000>;
+
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			partition@0 {
+				compatible = "u-boot,env";
+				label = "u-boot,env";
+				reg = <0x00000 0x20000>;
+			};
 		};
 
-		factory: partition@200000 {
+		partition@200000 {
 			label = "Factory";
 			reg = <0x200000 0x100000>;
 			read-only;
