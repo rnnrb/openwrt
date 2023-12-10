@@ -231,7 +231,7 @@ $(eval $(call KernelPackage,google-firmware))
 define KernelPackage/gpio-f7188x
   SUBMENU:=$(OTHER_MENU)
   TITLE:=Fintek F718xx/F818xx GPIO Support
-  DEPENDS:=@GPIO_SUPPORT @TARGET_x86
+  DEPENDS:=@GPIO_SUPPORT @(x86_64||x86)
   KCONFIG:=CONFIG_GPIO_F7188X
   FILES:=drivers/gpio/gpio-f7188x.ko
   AUTOLOAD:=$(call AutoProbe,gpio-f7188x)
@@ -360,7 +360,7 @@ $(eval $(call KernelPackage,gpio-pcf857x))
 
 define KernelPackage/gpio-it87
   SUBMENU:=$(OTHER_MENU)
-  DEPENDS:=@GPIO_SUPPORT @TARGET_x86
+  DEPENDS:=@GPIO_SUPPORT @(x86_64||x86)
   TITLE:=GPIO support for IT87xx Super I/O chips
   KCONFIG:=CONFIG_GPIO_IT87
   FILES:=drivers/gpio/gpio-it87.ko
@@ -378,7 +378,7 @@ $(eval $(call KernelPackage,gpio-it87))
 
 define KernelPackage/gpio-amd-fch
   SUBMENU:=$(OTHER_MENU)
-  DEPENDS:=@GPIO_SUPPORT @TARGET_x86
+  DEPENDS:=@GPIO_SUPPORT @(x86_64||x86)
   TITLE:=GPIO support for AMD Fusion Controller Hub (G-series SOCs)
   KCONFIG:=CONFIG_GPIO_AMD_FCH
   FILES:=drivers/gpio/gpio-amd-fch.ko
@@ -1300,7 +1300,7 @@ $(eval $(call KernelPackage,tpm))
 define KernelPackage/tpm-tis
   SUBMENU:=$(OTHER_MENU)
   TITLE:=TPM TIS 1.2 Interface / TPM 2.0 FIFO Interface
-	DEPENDS:= @TARGET_x86 +kmod-tpm
+	DEPENDS:= @(x86_64||x86) +kmod-tpm
   KCONFIG:= CONFIG_TCG_TIS
   FILES:= \
 	drivers/char/tpm/tpm_tis.ko \
