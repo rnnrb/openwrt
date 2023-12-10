@@ -155,6 +155,24 @@ define Kernel/CompileImage/Default
 	rm -f $(TARGET_DIR)/init
 	+$(KERNEL_MAKE) $(KERNEL_MAKEOPTS_IMAGE) $(if $(KERNELNAME),$(KERNELNAME),all)
 	$(call Kernel/CopyImage)
+
+	# create the Kbuild area
+	$(KERNEL_MAKE) $(KERNEL_MAKEOPTS_IMAGE) modules_prepare
+	# listing from scripts/package/builddeb, deploy_kernel_headers()
+	mkdir $(LINUX_DIR)/module_build
+	( \
+		cd '$(LINUX_DIR)'; \
+		find . 'arch/$(LINUX_KARCH)' -maxdepth 1 -name Makefile\* -print0; \
+		find include scripts \( -type f -o -type l \) -print0; \
+		find 'arch/$(LINUX_KARCH)' \( -name Kbuild.platforms -o -name Platform \) -print0; \
+		find $$$$(find 'arch/$(LINUX_KARCH)' \( -name include -o -name scripts -type d \) -print) -type f -print0; \
+	) | tar -c -f - -C '$(LINUX_DIR)' --null -T - | tar -xf - -C '$(LINUX_DIR)/module_build'
+	( \
+		cd '$(LINUX_DIR)'; \
+		grep -q -eCONFIG_OBJTOOL=[ym] .config && printf tools/objtool/objtool\\0; \
+		find 'arch/$(LINUX_KARCH)/include' Module.symvers include scripts -type f -print0; \
+		grep -q -eCONFIG_GCC_PLUGINS=[ym] .config && find scripts/gcc-plugins -name \*.so -print0; \
+	) | tar -c -f - -C '$(LINUX_DIR)' --null -T - | tar -xf - -C '$(LINUX_DIR)/module_build'
 endef
 
 ifneq ($(CONFIG_TARGET_ROOTFS_INITRAMFS),)
