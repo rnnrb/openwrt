@@ -1129,7 +1129,9 @@ define KernelPackage/video-dma
   KCONFIG:= \
 	CONFIG_VIDEOBUF2_DMA_CONTIG \
 	CONFIG_VIDEOBUF2_DMA_SG
-  FILES:= $(LINUX_DIR)/drivers/media/common/videobuf2/videobuf2-dma-*.ko
+  FILES:= \
+	$(LINUX_DIR)/drivers/media/common/videobuf2/videobuf2-dma-contig.ko \
+	$(wildcard $(LINUX_DIR)/drivers/media/common/videobuf2/videobuf2-dma-sg.ko)
   AUTOLOAD:=$(call AutoLoad,66,videobuf2-dma-contig videobuf2-dma-sg)
   $(call AddDepends/video)
 endef
