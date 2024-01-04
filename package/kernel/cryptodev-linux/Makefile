@@ -31,7 +31,7 @@ define KernelPackage/cryptodev
   URL:=http://cryptodev-linux.org/
   VERSION:=$(LINUX_VERSION)+$(PKG_VERSION)-$(BOARD)-$(PKG_RELEASE)
   DEPENDS:=+kmod-crypto-authenc +kmod-crypto-hash
-  FILES:=$(PKG_BUILD_DIR)/cryptodev.$(LINUX_KMOD_SUFFIX)
+  FILES:=$(PKG_BUILD_DIR)/cryptodev.ko
   AUTOLOAD:=$(call AutoLoad,50,cryptodev)
   MODPARAMS.cryptodev:=cryptodev_verbosity=-1
 endef
