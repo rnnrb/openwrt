@@ -56,6 +56,7 @@ while [ -n "$1" ]; do
 done
 
 export CONFFILES=/tmp/sysupgrade.conffiles
+export IGNOREFILES=/tmp/sysupgrade.ignore
 export CONF_TAR=/tmp/sysupgrade.tgz
 export ETCBACKUP_DIR=/etc/backup
 export INSTALLED_PACKAGES=${ETCBACKUP_DIR}/installed_packages.txt
@@ -255,9 +256,12 @@ do_save_conffiles() {
 			\) | sed -e 's,.*/,,;s/\.control /\t/' > ${INSTALLED_PACKAGES}
 	fi
 
+	sed -ne '/^[[:space:]]*$/d; /^#/d; p' \
+		/etc/sysignore.conf /lib/upgrade/ignore.d/* > "$IGNOREFILES"
+
 	v "Saving config files..."
 	[ "$VERBOSE" -gt 1 ] && TAR_V="v" || TAR_V=""
-	tar c${TAR_V}zf "$conf_tar" -T "$CONFFILES" 2>/dev/null
+	tar c${TAR_V}zf "$conf_tar" -T "$CONFFILES" -X "$IGNOREFILES" 2>/dev/null
 	if [ "$?" -ne 0 ]; then
 		echo "Failed to create the configuration backup."
 		rm -f "$conf_tar"
@@ -268,7 +272,7 @@ do_save_conffiles() {
 		umount "$ETCBACKUP_DIR"
 		rm -rf "$RAMFS"
 	}
-	rm -f "$CONFFILES"
+	rm -f "$CONFFILES" "$IGNOREFILES"
 }
 
 if [ $CONF_BACKUP_LIST -eq 1 ]; then
