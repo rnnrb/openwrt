@@ -15,7 +15,7 @@ define KernelPackage/camera-bcm2835
     CONFIG_VIDEO_IMX708=n \
     CONFIG_VIDEO_ISP_BCM2835=n
   FILES:= \
-    $(LINUX_DIR)/drivers/staging/vc04_services/bcm2835-camera/bcm2835-v4l2.ko
+    drivers/staging/vc04_services/bcm2835-camera/bcm2835-v4l2.ko
   AUTOLOAD:=$(call AutoLoad,65,bcm2835-v4l2)
   $(call AddDepends/video,@TARGET_bcm27xx +kmod-vchiq-mmal-bcm2835 +kmod-video-videobuf2)
 endef
@@ -42,11 +42,11 @@ define KernelPackage/drm-vc4
     CONFIG_DRM_V3D=n \
     CONFIG_DRM_TVE200=n
   FILES:= \
-    $(LINUX_DIR)/drivers/gpu/drm/display/drm_display_helper.ko \
-    $(LINUX_DIR)/drivers/gpu/drm/drm_dma_helper.ko \
-    $(LINUX_DIR)/drivers/gpu/drm/vc4/vc4.ko \
-    $(LINUX_DIR)/drivers/gpu/drm/drm_kms_helper.ko \
-    $(LINUX_DIR)/drivers/media/cec/core/cec.ko
+    drivers/gpu/drm/display/drm_display_helper.ko \
+    drivers/gpu/drm/drm_dma_helper.ko \
+    drivers/gpu/drm/vc4/vc4.ko \
+    drivers/gpu/drm/drm_kms_helper.ko \
+    drivers/media/cec/core/cec.ko
   AUTOLOAD:=$(call AutoProbe,vc4)
 endef
 
@@ -63,7 +63,7 @@ define KernelPackage/vc-sm-cma
   KCONFIG:= \
     CONFIG_BCM_VC_SM_CMA
   FILES:= \
-    $(LINUX_DIR)/drivers/staging/vc04_services/vc-sm-cma/vc-sm-cma.ko
+    drivers/staging/vc04_services/vc-sm-cma/vc-sm-cma.ko
   $(call AddDepends/video,@TARGET_bcm27xx)
 endef
 
@@ -81,7 +81,7 @@ define KernelPackage/vchiq-mmal-bcm2835
     CONFIG_BCM2835_VCHIQ_MMAL \
     CONFIG_VIDEO_CODEC_BCM2835=n
   FILES:= \
-    $(LINUX_DIR)/drivers/staging/vc04_services/vchiq-mmal/bcm2835-mmal-vchiq.ko
+    drivers/staging/vc04_services/vchiq-mmal/bcm2835-mmal-vchiq.ko
   $(call AddDepends/video,@TARGET_bcm27xx +kmod-vc-sm-cma)
 endef
 

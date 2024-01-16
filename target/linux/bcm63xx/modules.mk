@@ -7,7 +7,7 @@ define KernelPackage/pcmcia-bcm63xx
   TITLE:=Broadcom BCM63xx PCMCIA support
   DEPENDS:=@TARGET_bcm63xx +kmod-pcmcia-rsrc
   KCONFIG:=CONFIG_PCMCIA_BCM63XX
-  FILES:=$(LINUX_DIR)/drivers/pcmcia/bcm63xx_pcmcia.ko
+  FILES:=drivers/pcmcia/bcm63xx_pcmcia.ko
   AUTOLOAD:=$(call AutoLoad,41,bcm63xx_pcmcia)
 endef
 
@@ -23,7 +23,7 @@ define KernelPackage/bcm63xx-udc
   DEPENDS:=@TARGET_bcm63xx +kmod-usb-gadget
   KCONFIG:=CONFIG_USB_BCM63XX_UDC
   FILES:= \
-	$(LINUX_DIR)/drivers/usb/gadget/udc/bcm63xx_udc.ko
+	drivers/usb/gadget/udc/bcm63xx_udc.ko
   AUTOLOAD:=$(call AutoLoad,51,bcm63xx_udc)
   $(call AddDepends/usb)
 endef

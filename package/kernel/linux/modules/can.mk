@@ -28,8 +28,8 @@ define KernelPackage/can
 	CONFIG_CAN_SOFTING=n \
 	CONFIG_NET_EMATCH_CANID=n \
 	CONFIG_CAN_DEBUG_DEVICES=n
-  FILES:=$(LINUX_DIR)/drivers/net/can/dev/can-dev.ko \
-	 $(LINUX_DIR)/net/can/can.ko
+  FILES:=drivers/net/can/dev/can-dev.ko \
+	 net/can/can.ko
   AUTOLOAD:=$(call AutoProbe,can can-dev)
 endef
 
@@ -49,7 +49,7 @@ endef
 define KernelPackage/can-bcm
   TITLE:=Broadcast Manager CAN Protcol
   KCONFIG:=CONFIG_CAN_BCM
-  FILES:=$(LINUX_DIR)/net/can/can-bcm.ko
+  FILES:=net/can/can-bcm.ko
   AUTOLOAD:=$(call AutoProbe,can-bcm)
   $(call AddDepends/can)
 endef
@@ -66,7 +66,7 @@ $(eval $(call KernelPackage,can-bcm))
 define KernelPackage/can-c-can
   TITLE:=BOSCH C_CAN/D_CAN drivers
   KCONFIG:=CONFIG_CAN_C_CAN
-  FILES:=$(LINUX_DIR)/drivers/net/can/c_can/c_can.ko
+  FILES:=drivers/net/can/c_can/c_can.ko
   AUTOLOAD:=$(call AutoProbe,c_can)
   $(call AddDepends/can)
 endef
@@ -82,7 +82,7 @@ define KernelPackage/can-c-can-pci
   TITLE:=PCI Bus based BOSCH C_CAN/D_CAN driver
   KCONFIG:=CONFIG_CAN_C_CAN_PCI
   DEPENDS:=kmod-can-c-can @PCI_SUPPORT
-  FILES:=$(LINUX_DIR)/drivers/net/can/c_can/c_can_pci.ko
+  FILES:=drivers/net/can/c_can/c_can_pci.ko
   AUTOLOAD:=$(call AutoProbe,c_can_pci)
   $(call AddDepends/can)
 endef
@@ -99,7 +99,7 @@ define KernelPackage/can-c-can-platform
   TITLE:=Platform Bus based BOSCH C_CAN/D_CAN driver
   KCONFIG:=CONFIG_CAN_C_CAN_PLATFORM
   DEPENDS:=kmod-can-c-can +kmod-regmap-core
-  FILES:=$(LINUX_DIR)/drivers/net/can/c_can/c_can_platform.ko
+  FILES:=drivers/net/can/c_can/c_can_platform.ko
   AUTOLOAD:=$(call AutoProbe,c_can_platform)
   $(call AddDepends/can)
 endef
@@ -119,7 +119,7 @@ $(eval $(call KernelPackage,can-c-can-platform))
 define KernelPackage/can-flexcan
   TITLE:=Support for Freescale FLEXCAN based chips
   KCONFIG:=CONFIG_CAN_FLEXCAN
-  FILES:=$(LINUX_DIR)/drivers/net/can/flexcan.ko
+  FILES:=drivers/net/can/flexcan.ko
   AUTOLOAD:=$(call AutoProbe,flexcan)
   $(call AddDepends/can,@TARGET_imx)
 endef
@@ -134,7 +134,7 @@ $(eval $(call KernelPackage,can-flexcan))
 define KernelPackage/can-gw
   TITLE:=CAN Gateway/Router
   KCONFIG:=CONFIG_CAN_GW
-  FILES:=$(LINUX_DIR)/net/can/can-gw.ko
+  FILES:=net/can/can-gw.ko
   AUTOLOAD:=$(call AutoProbe,can-gw)
   $(call AddDepends/can)
 endef
@@ -151,7 +151,7 @@ define KernelPackage/can-mcp251x
   KCONFIG:=\
 	CONFIG_SPI=y \
 	CONFIG_CAN_MCP251X
-  FILES:=$(LINUX_DIR)/drivers/net/can/spi/mcp251x.ko
+  FILES:=drivers/net/can/spi/mcp251x.ko
   AUTOLOAD:=$(call AutoProbe,mcp251x)
   $(call AddDepends/can)
 endef
@@ -166,7 +166,7 @@ $(eval $(call KernelPackage,can-mcp251x))
 define KernelPackage/can-raw
   TITLE:=Raw CAN Protcol
   KCONFIG:=CONFIG_CAN_RAW
-  FILES:=$(LINUX_DIR)/net/can/can-raw.ko
+  FILES:=net/can/can-raw.ko
   AUTOLOAD:=$(call AutoProbe,can-raw)
   $(call AddDepends/can)
 endef
@@ -182,7 +182,7 @@ $(eval $(call KernelPackage,can-raw))
 define KernelPackage/can-slcan
   TITLE:=Serial / USB serial CAN Adaptors (slcan)
   KCONFIG:=CONFIG_CAN_SLCAN
-  FILES:=$(LINUX_DIR)/drivers/net/can/slcan.ko
+  FILES:=drivers/net/can/slcan.ko
   AUTOLOAD:=$(call AutoProbe,slcan)
   $(call AddDepends/can)
 endef
@@ -199,7 +199,7 @@ $(eval $(call KernelPackage,can-slcan))
 define KernelPackage/can-usb-8dev
   TITLE:=8 devices USB2CAN interface
   KCONFIG:=CONFIG_CAN_8DEV_USB
-  FILES:=$(LINUX_DIR)/drivers/net/can/usb/usb_8dev.ko
+  FILES:=drivers/net/can/usb/usb_8dev.ko
   AUTOLOAD:=$(call AutoProbe,usb_8dev)
   $(call AddDepends/can,+kmod-usb-core)
 endef
@@ -215,7 +215,7 @@ $(eval $(call KernelPackage,can-usb-8dev))
 define KernelPackage/can-usb-ems
   TITLE:=EMS CPC-USB/ARM7 CAN/USB interface
   KCONFIG:=CONFIG_CAN_EMS_USB
-  FILES:=$(LINUX_DIR)/drivers/net/can/usb/ems_usb.ko
+  FILES:=drivers/net/can/usb/ems_usb.ko
   AUTOLOAD:=$(call AutoProbe,ems_usb)
   $(call AddDepends/can,+kmod-usb-core)
 endef
@@ -231,7 +231,7 @@ $(eval $(call KernelPackage,can-usb-ems))
 define KernelPackage/can-usb-esd
   TITLE:=ESD USB/2 CAN/USB interface
   KCONFIG:=CONFIG_CAN_ESD_USB2
-  FILES:=$(LINUX_DIR)/drivers/net/can/usb/esd_usb2.ko
+  FILES:=drivers/net/can/usb/esd_usb2.ko
   AUTOLOAD:=$(call AutoProbe,esd_usb2)
   $(call AddDepends/can,+kmod-usb-core)
 endef
@@ -248,7 +248,7 @@ define KernelPackage/can-usb-kvaser
   TITLE:=Kvaser CAN/USB interface
   KCONFIG:=CONFIG_CAN_KVASER_USB
   FILES:= \
-	$(LINUX_DIR)/drivers/net/can/usb/kvaser_usb/kvaser_usb.ko
+	drivers/net/can/usb/kvaser_usb/kvaser_usb.ko
   AUTOLOAD:=$(call AutoProbe,kvaser_usb)
   $(call AddDepends/can,+kmod-usb-core)
 endef
@@ -264,7 +264,7 @@ $(eval $(call KernelPackage,can-usb-kvaser))
 define KernelPackage/can-usb-peak
   TITLE:=PEAK PCAN-USB/USB Pro interfaces
   KCONFIG:=CONFIG_CAN_PEAK_USB
-  FILES:=$(LINUX_DIR)/drivers/net/can/usb/peak_usb/peak_usb.ko
+  FILES:=drivers/net/can/usb/peak_usb/peak_usb.ko
   AUTOLOAD:=$(call AutoProbe,peak_usb)
   $(call AddDepends/can,+kmod-usb-core)
 endef
@@ -280,7 +280,7 @@ $(eval $(call KernelPackage,can-usb-peak))
 define KernelPackage/can-vcan
   TITLE:=Virtual Local CAN Interface (vcan)
   KCONFIG:=CONFIG_CAN_VCAN
-  FILES:=$(LINUX_DIR)/drivers/net/can/vcan.ko
+  FILES:=drivers/net/can/vcan.ko
   AUTOLOAD:=$(call AutoProbe,vcan)
   $(call AddDepends/can)
 endef
@@ -295,7 +295,7 @@ $(eval $(call KernelPackage,can-vcan))
 define KernelPackage/can-xilinx-can
   TITLE:=Xilinx CAN IP
   KCONFIG:=CONFIG_CAN_XILINXCAN
-  FILES:=$(LINUX_DIR)/drivers/net/can/xilinx_can.ko
+  FILES:=drivers/net/can/xilinx_can.ko
   AUTOLOAD:=$(call AutoProbe,xilinx_can)
   $(call AddDepends/can,@TARGET_zynq)
 endef
