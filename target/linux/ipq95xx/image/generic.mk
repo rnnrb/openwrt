@@ -11,3 +11,4 @@ define Device/qcom_rdp433
 	IMAGE_SIZE := 25344k
 	IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs | append-metadata
 endef
+TARGET_DEVICES += qcom_rdp433
