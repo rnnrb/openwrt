@@ -288,7 +288,7 @@ __TMP__
 
 foreach my $name (@$list) {
 	next if($git->ls($start, "$name$to"));
-	my $new=$git->ls($start, "$name$from");
+	my $new=$git->ls('', "\"$name$from\"");
 	$git->putcmd("M $new->[0] $new->[1] $name$to");
 	$git->putcmd("D $name$from");
 }
