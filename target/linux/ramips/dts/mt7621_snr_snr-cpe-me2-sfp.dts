@@ -105,11 +105,18 @@
 			};
 
 			partition@30000 {
-				label = "config";
-				reg = <0x30000 0x10000>;
+				compatible = "u-boot,env";
+				label = "u-boot,env";
+				reg = <0x30000 0x1000>;
+				read-only;
 			};
 
-			factory: partition@40000 {
+			partition@31000 {
+				label = "config";
+				reg = <0x31000 0xf000>;
+			};
+
+			partition@40000 {
 				label = "factory";
 				reg = <0x40000 0x10000>;
 				read-only;
@@ -137,11 +144,6 @@
 				compatible = "denx,uimage";
 				label = "firmware";
 				reg = <0x50000 0xfb0000>;
-			};
-
-			partition@30001 {
-				label = "uboot-env";
-				reg = <0x30000 0x1000>;
 			};
 		};
 	};

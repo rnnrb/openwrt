@@ -8,6 +8,7 @@
 
 / {
 	aliases {
+		label-mac-device = &gmac1;
 		led-boot = &led_power;
 		led-failsafe = &led_power;
 		led-running = &led_power;
@@ -90,9 +91,16 @@
 			};
 
 			partition@30000 {
+				compatible = "u-boot,env";
 				label = "u-boot-env";
 				reg = <0x30000 0x10000>;
 				read-only;
+
+				macaddr_uboot_eth: ethaddr {
+				};
+
+				macaddr_uboot_wan: wanaddr {
+				};
 			};
 
 			factory: partition@40000 {
@@ -118,10 +126,18 @@
 	};
 };
 
+&gmac0 {
+	nvmem-cells = <&macaddr_uboot_eth>;
+	nvmem-cell-names = "mac-address";
+};
+
 &gmac1 {
 	status = "okay";
 	label = "wan";
 	phy-handle = <&ethphy0>;
+
+	nvmem-cells = <&macaddr_uboot_wan>;
+	nvmem-cell-names = "mac-address";
 };
 
 &mdio {

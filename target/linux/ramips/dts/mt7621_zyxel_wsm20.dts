@@ -98,8 +98,16 @@
 		};
 
 		partition@100000 {
-			reg = <0x100000 0x100000>;
+			compatible = "u-boot,env";
+			label = "u-boot,env";
+			reg = <0x100000 0x20000>;
+			read-only;
+		};
+
+		partition@120000 {
+			reg = <0x120000 0xe0000>;
 			label = "Config";
+			read-only;
 		};
 
 		factory: partition@200000 {

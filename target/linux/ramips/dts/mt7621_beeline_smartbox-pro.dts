@@ -69,6 +69,7 @@
 		 * two parts with "u-boot-env" partition between them.
 		 */
 		partition@600000 {
+			compatible = "u-boot,env";
 			label = "u-boot-env";
 			reg = <0x600000 0x20000>;
 		};

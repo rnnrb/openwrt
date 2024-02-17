@@ -77,7 +77,17 @@
 
 			partition@30000 {
 				label = "u-boot-env";
-				reg = <0x30000 0x1000>;
+				reg = <0x30000 0x2000>;
+
+				compatible = "fixed-partitions";
+				#address-cells = <1>;
+				#size-cells = <1>;
+
+				partition@0 {
+					compatible = "u-boot,env";
+					label = "u-boot,env";
+					reg = <0x0000 0x1000>;
+				};
 			};
 
 			partition@32000 {

@@ -75,9 +75,16 @@
 			};
 
 			partition@30000 {
+				compatible = "u-boot,env";
 				label = "u-boot-env";
 				reg = <0x30000 0x10000>;
 				read-only;
+
+				macaddr_uboot_eth: ethaddr {
+				};
+
+				macaddr_uboot_wan: wanaddr {
+				};
 			};
 
 			factory: partition@40000 {
@@ -96,10 +103,6 @@
 
 					eeprom_factory_8000: eeprom@8000 {
 						reg = <0x8000 0x4da8>;
-					};
-
-					macaddr_factory_4: macaddr@4 {
-						reg = <0x4 0x6>;
 					};
 				};
 			};
@@ -138,7 +141,7 @@
 };
 
 &gmac0 {
-	nvmem-cells = <&macaddr_factory_4>;
+	nvmem-cells = <&macaddr_uboot_eth>;
 	nvmem-cell-names = "mac-address";
 };
 
@@ -147,7 +150,7 @@
 	label = "wan";
 	phy-handle = <&ethphy0>;
 
-	nvmem-cells = <&macaddr_factory_4>;
+	nvmem-cells = <&macaddr_uboot_wan>;
 	nvmem-cell-names = "mac-address";
 };
 

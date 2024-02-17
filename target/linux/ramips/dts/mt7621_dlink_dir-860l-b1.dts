@@ -83,9 +83,19 @@
 				label = "u-boot-env";
 				reg = <0x30000 0x4000>;
 				read-only;
+
+				compatible = "fixed-partitions";
+				#address-cells = <1>;
+				#size-cells = <1>;
+
+				partition@0 {
+					compatible = "u-boot,env";
+					label = "u-boot,env";
+					reg = <0x00000 0x1000>;
+				};
 			};
 
-			radio: partition@34000 {
+			partition@34000 {
 				label = "radio";
 				reg = <0x34000 0x4000>;
 				read-only;
@@ -109,7 +119,7 @@
 				};
 			};
 
-			factory: partition@38000 {
+			partition@38000 {
 				label = "factory";
 				reg = <0x38000 0x8000>;
 				read-only;
