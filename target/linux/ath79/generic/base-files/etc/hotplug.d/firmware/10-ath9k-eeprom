@@ -113,7 +113,6 @@ case "$FIRMWARE" in
 		;;
 	wd,mynet-n600|\
 	wd,mynet-n750)
-		caldata_extract "art" 0x5000 0x440
 		ath9k_patch_mac $(mtd_get_mac_ascii devdata "wlan5mac")
 		;;
 	wd,mynet-wifi-rangeextender)
