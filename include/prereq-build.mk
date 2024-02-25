@@ -181,25 +181,18 @@ $(eval $(call SetupHostCommand,install,Please install GNU 'install', \
 $(eval $(call SetupHostCommand,perl,Please install Perl 5.x, \
 	perl --version | grep "perl.*v5"))
 
-$(eval $(call SetupHostCommand,python,Please install Python >= 3.7, \
-	python3.11 -V 2>&1 | grep 'Python 3', \
-	python3.10 -V 2>&1 | grep 'Python 3', \
-	python3.9 -V 2>&1 | grep 'Python 3', \
-	python3.8 -V 2>&1 | grep 'Python 3', \
-	python3.7 -V 2>&1 | grep 'Python 3', \
-	python3 -V 2>&1 | grep -E 'Python 3\.([7-9]|[0-9][0-9])\.?'))
-
 $(eval $(call SetupHostCommand,python3,Please install Python >= 3.7, \
 	python3.11 -V 2>&1 | grep 'Python 3', \
 	python3.10 -V 2>&1 | grep 'Python 3', \
 	python3.9 -V 2>&1 | grep 'Python 3', \
 	python3.8 -V 2>&1 | grep 'Python 3', \
 	python3.7 -V 2>&1 | grep 'Python 3', \
-	python3 -V 2>&1 | grep -E 'Python 3\.([7-9]|[0-9][0-9])\.?'))
+	python3 -V 2>&1 | grep -E 'Python 3\.([7-9]|1[0-1])\.?'))
 
 $(eval $(call TestHostCommand,python3-distutils, \
 	Please install the Python3 distutils module, \
-	$(STAGING_DIR_HOST)/bin/python3 -c 'from distutils import util'))
+	echo 'from sys import version_info\nif version_info < (3, 12):\n\tfrom distutils import util' | \
+		$(STAGING_DIR_HOST)/bin/python3 -))
 
 $(eval $(call TestHostCommand,python3-stdlib, \
 	Please install the Python3 stdlib module, \
@@ -234,7 +227,10 @@ $(STAGING_DIR_HOST)/bin/mkhash: $(SCRIPT_DIR)/mkhash.c
 $(STAGING_DIR_HOST)/bin/xxd: $(SCRIPT_DIR)/xxdi.pl
 	$(LN) $< $@
 
-prereq: $(STAGING_DIR_HOST)/bin/mkhash $(STAGING_DIR_HOST)/bin/xxd
+$(STAGING_DIR_HOST)/bin/python:
+	$(LN) python3 $@
+
+prereq: $(STAGING_DIR_HOST)/bin/mkhash $(STAGING_DIR_HOST)/bin/xxd $(STAGING_DIR_HOST)/bin/python
 
 # Install ldconfig stub
 $(eval $(call TestHostCommand,ldconfig-stub,Failed to install stub, \
