@@ -99,6 +99,7 @@
 		compatible = "jedec,spi-nor";
 		reg = <0>;
 		spi-max-frequency = <25000000>;
+		small-buffer-read;
 		m25p,fast-read;
 
 		partitions {
