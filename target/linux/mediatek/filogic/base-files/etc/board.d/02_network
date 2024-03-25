@@ -26,6 +26,7 @@ mediatek_setup_interfaces()
 	asus,tuf-ax4200|\
 	jdcloud,re-cp-03|\
 	mediatek,mt7981-rfb|\
+	ruijie,rg-x60-pro|\
 	zbtlink,zbt-z8102ax)
 		ucidef_set_interfaces_lan_wan "lan1 lan2 lan3 lan4" eth1
 		;;
@@ -146,6 +147,11 @@ mediatek_setup_macs()
 		lan_mac=$(mtd_get_mac_ascii factory lanMac)
 		wan_mac=$(macaddr_add "$lan_mac" 1)
 		label_mac=$wan_mac
+		;;
+	ruijie,rg-x60-pro)
+		label_mac=$(mtd_get_mac_ascii product_info ethaddr)
+		wan_mac=$label_mac
+		lan_mac=$(macaddr_add "$label_mac" 1)
 		;;
 	smartrg,sdg-8612|\
 	smartrg,sdg-8614|\
