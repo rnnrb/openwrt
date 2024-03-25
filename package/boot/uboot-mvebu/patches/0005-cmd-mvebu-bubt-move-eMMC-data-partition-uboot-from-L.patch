@@ -1,0 +1,45 @@
+From 632d6b0c92c5ec739a95f2c3db1439146956bd3a Mon Sep 17 00:00:00 2001
+From: Josua Mayer <josua@solid-run.com>
+Date: Sun, 8 Oct 2023 11:59:05 +0200
+Subject: [PATCH 2/3] cmd: mvebu/bubt: move eMMC data-partition uboot from
+ LBA-0 to 4096
+
+A38x bootrom only searches 2 sectors when booting from eMMC,
+irregardless of data or boot partition: 0 & 4096.
+
+For eMMC boot partitions sector 0 is fine, but on data partition it
+conflicts with MBR.
+
+Change bubt command default to 4096 for eMMC data partition only, to
+allow using an MBR partition table on the eMMC data partition while also
+booting from it.
+
+Signed-off-by: Josua Mayer <josua@solid-run.com>
+---
+ cmd/mvebu/bubt.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/cmd/mvebu/bubt.c b/cmd/mvebu/bubt.c
+index ca24a5c1c4b..df33d06b53a 100644
+--- a/cmd/mvebu/bubt.c
++++ b/cmd/mvebu/bubt.c
+@@ -240,9 +240,14 @@ static int mmc_burn_image(size_t image_size)
+ #endif
+ 
+ 	/* SD reserves LBA-0 for MBR and boots from LBA-1,
+-	 * MMC/eMMC boots from LBA-0
++	 * MMC/eMMC boots from LBA-0 and LBA-4096
+ 	 */
+-	start_lba = IS_SD(mmc) ? 1 : 0;
++	if (IS_SD(mmc))
++		start_lba = 1;
++	else if(!part)
++		start_lba = 4096;
++	else
++		start_lba = 0;
+ #ifdef CONFIG_BLK
+ 	blk_count = image_size / mmc->write_bl_len;
+ 	if (image_size % mmc->write_bl_len)
+-- 
+2.35.3
+
