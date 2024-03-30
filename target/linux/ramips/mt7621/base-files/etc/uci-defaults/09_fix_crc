@@ -6,6 +6,9 @@ fstype="$(/bin/mount | awk '($3 ~ /^\/$/) && ($5 !~ /rootfs/) { print $5 }')"
 	exit 0
 
 case "$(board_name)" in
+buffalo,wsr-2533dhpl2)
+	trx_magic=0x50484c32
+	;;
 buffalo,wsr-2533dhpls)
 	trx_magic=0x44484C53
 	;;
