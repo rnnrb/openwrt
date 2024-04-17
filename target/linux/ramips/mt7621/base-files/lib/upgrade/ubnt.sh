@@ -46,7 +46,7 @@ platform_upgrade_ubnt_erx() {
 		exit 1
 	fi
 
-	local kernel_part="$(ubnt_get_target_kernel ${factory_mtd})"
+	local kernel_part="kernel1"
 	if [ -z "$kernel_part" ]; then
 		echo "cannot find factory partition" >&2
 		exit 1
