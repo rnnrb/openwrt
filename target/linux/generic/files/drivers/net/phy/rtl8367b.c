@@ -1,5 +1,7 @@
 /*
- * Platform driver for the Realtek RTL8367R-VB ethernet switches
+ * Platform driver for Realtek RTL8367B family chips, i.e. RTL8367R-VB and RTL8367RB
+ * extended with support for RTL8367C family chips, i.e. RTL8367S and RTL8367RB-VB
+ * extended with support for RTL8367D family chips, i.e. RTL8367S-VB
  *
  * Copyright (C) 2012 Gabor Juhos <juhosg@openwrt.org>
  *
@@ -265,6 +267,47 @@ struct rtl8367b_initval {
 
 #define RTL8367B_MIB_RXB_ID		0	/* IfInOctets */
 #define RTL8367B_MIB_TXB_ID		28	/* IfOutOctets */
+
+#define RTL8367D_PORT_STATUS_REG(_p)		(0x12d0 + (_p))
+
+#define   RTL8367D_PORT_STATUS_SPEED1_MASK	0x3000
+#define   RTL8367D_PORT_STATUS_SPEED1_SHIFT	10 /*12-2*/
+
+#define RTL8367D_REG_MAC0_FORCE_SELECT		0x12c0
+#define RTL8367D_REG_MAC0_FORCE_SELECT_EN	0x12c8
+#define RTL8367D_DI_FORCE_REG(_x)		(RTL8367D_REG_MAC0_FORCE_SELECT + (_x) + 5)
+#define RTL8367D_DI_FORCE_REG_EN(_x)		(RTL8367D_REG_MAC0_FORCE_SELECT_EN + (_x) + 5)
+
+#define RTL8367D_VLAN_PVID_CTRL_REG(_p)		(0x0700 + (_p))
+#define RTL8367D_VLAN_PVID_CTRL_MASK		0xfff
+#define RTL8367D_VLAN_PVID_CTRL_SHIFT(_p)	0
+
+#define RTL8367B_SPEED_10		0
+#define RTL8367B_SPEED_100		1
+#define RTL8367B_SPEED_1000		2
+#define RTL8367D_SPEED_500		3
+#define RTL8367D_SPEED_2500		5
+
+#define RTL8367D_FIDMAX			3
+#define RTL8367D_FID_MASK		3
+#define RTL8367D_TA_VLAN1_FID_SHIFT		0
+#define RTL8367D_TA_VLAN1_FID_MASK		RTL8367D_FID_MASK
+
+#define RTL8367D_VID_MASK	0xfff
+#define RTL8367D_TA_VLAN_VID_MASK		RTL8367D_VID_MASK
+
+#define CHIP_FAMILY_RTL8367B	0
+#define CHIP_FAMILY_RTL8367C	1
+#define CHIP_FAMILY_RTL8367D	2
+
+#define CHIP_UNKNOWN			((CHIP_FAMILY_RTL8367B << 4) + 0)
+#define CHIP_RTL8367R_VB		((CHIP_FAMILY_RTL8367B << 4) + 1)
+#define CHIP_RTL8367RB			((CHIP_FAMILY_RTL8367B << 4) + 2)
+
+#define CHIP_RTL8367S			((CHIP_FAMILY_RTL8367C << 4) + 0)
+#define CHIP_RTL8367RB_VB		((CHIP_FAMILY_RTL8367C << 4) + 1)
+
+#define CHIP_RTL8367S_VB		((CHIP_FAMILY_RTL8367D << 4) + 0)
 
 static struct rtl8366_mib_counter
 rtl8367b_mib_counters[RTL8367B_NUM_MIB_COUNTERS] = {
@@ -730,17 +773,15 @@ static int rtl8367b_write_phy_reg(struct rtl8366_smi *smi,
 static int rtl8367b_init_regs(struct rtl8366_smi *smi)
 {
 	const struct rtl8367b_initval *initvals;
-	u32 chip_num;
 	u32 chip_ver;
 	u32 rlvid;
 	int count;
 	int err;
 
 	REG_WR(smi, RTL8367B_RTL_MAGIC_ID_REG, RTL8367B_RTL_MAGIC_ID_VAL);
-	REG_RD(smi, RTL8367B_CHIP_NUMBER_REG, &chip_num);
 	REG_RD(smi, RTL8367B_CHIP_VER_REG, &chip_ver);
 
-	if ((chip_ver ==  0x0020 || chip_ver == 0x00A0) && chip_num == 0x6367)  {
+	if ((smi->chip >> 4) != CHIP_FAMILY_RTL8367B) {
 		initvals = rtl8367c_initvals;
 		count = ARRAY_SIZE(rtl8367c_initvals);
 	} else {
@@ -872,15 +913,7 @@ static int rtl8367b_extif_set_force(struct rtl8366_smi *smi, int id,
 	u32 val;
 	int err;
 
-	mask = (RTL8367B_DI_FORCE_MODE |
-		RTL8367B_DI_FORCE_NWAY |
-		RTL8367B_DI_FORCE_TXPAUSE |
-		RTL8367B_DI_FORCE_RXPAUSE |
-		RTL8367B_DI_FORCE_LINK |
-		RTL8367B_DI_FORCE_DUPLEX |
-		RTL8367B_DI_FORCE_SPEED_MASK);
-
-	val = pa->speed;
+	val = pa->speed & RTL8367B_DI_FORCE_SPEED_MASK;
 	val |= pa->force_mode ? RTL8367B_DI_FORCE_MODE : 0;
 	val |= pa->nway ? RTL8367B_DI_FORCE_NWAY : 0;
 	val |= pa->txpause ? RTL8367B_DI_FORCE_TXPAUSE : 0;
@@ -888,7 +921,23 @@ static int rtl8367b_extif_set_force(struct rtl8366_smi *smi, int id,
 	val |= pa->link ? RTL8367B_DI_FORCE_LINK : 0;
 	val |= pa->duplex ? RTL8367B_DI_FORCE_DUPLEX : 0;
 
-	REG_RMW(smi, RTL8367B_DI_FORCE_REG(id), mask, val);
+	if ((smi->chip >> 4) == CHIP_FAMILY_RTL8367D) {
+		val |= (pa->speed << RTL8367D_PORT_STATUS_SPEED1_SHIFT) & RTL8367D_PORT_STATUS_SPEED1_MASK;
+
+		REG_WR(smi, RTL8367D_DI_FORCE_REG(id), val);
+
+		REG_WR(smi, RTL8367D_DI_FORCE_REG_EN(id), pa->force_mode ? 0xffff : 0x0000);
+	} else {
+		mask = (RTL8367B_DI_FORCE_MODE |
+			RTL8367B_DI_FORCE_NWAY |
+			RTL8367B_DI_FORCE_TXPAUSE |
+			RTL8367B_DI_FORCE_RXPAUSE |
+			RTL8367B_DI_FORCE_LINK |
+			RTL8367B_DI_FORCE_DUPLEX |
+			RTL8367B_DI_FORCE_SPEED_MASK);
+
+		REG_RMW(smi, RTL8367B_DI_FORCE_REG(id), mask, val);
+	}
 
 	return 0;
 }
@@ -970,6 +1019,8 @@ static int rtl8367b_extif_init_of(struct rtl8366_smi *smi, int id,
 	cfg->ability.duplex = be32_to_cpup(prop++);
 	cfg->ability.speed = be32_to_cpup(prop++);
 
+	if (((smi->chip >> 4) != CHIP_FAMILY_RTL8367D) && (cfg->ability.speed > RTL8367B_SPEED_1000))
+		cfg->ability.speed = RTL8367B_SPEED_1000;
 	err = rtl8367b_extif_init(smi, id, cfg);
 	kfree(cfg);
 
@@ -1115,8 +1166,12 @@ static int rtl8367b_get_vlan_4k(struct rtl8366_smi *smi, u32 vid,
 			 RTL8367B_TA_VLAN0_MEMBER_MASK;
 	vlan4k->untag = (data[0] >> RTL8367B_TA_VLAN0_UNTAG_SHIFT) &
 			RTL8367B_TA_VLAN0_UNTAG_MASK;
-	vlan4k->fid = (data[1] >> RTL8367B_TA_VLAN1_FID_SHIFT) &
-		      RTL8367B_TA_VLAN1_FID_MASK;
+	if ((smi->chip >> 4) == CHIP_FAMILY_RTL8367D)
+		vlan4k->fid = (data[1] >> RTL8367D_TA_VLAN1_FID_SHIFT) &
+				RTL8367D_TA_VLAN1_FID_MASK;
+	else
+		vlan4k->fid = (data[1] >> RTL8367B_TA_VLAN1_FID_SHIFT) &
+				RTL8367B_TA_VLAN1_FID_MASK;
 
 	return 0;
 }
@@ -1131,7 +1186,7 @@ static int rtl8367b_set_vlan_4k(struct rtl8366_smi *smi,
 	if (vlan4k->vid >= RTL8367B_NUM_VIDS ||
 	    vlan4k->member > RTL8367B_TA_VLAN0_MEMBER_MASK ||
 	    vlan4k->untag > RTL8367B_UNTAG_MASK ||
-	    vlan4k->fid > RTL8367B_FIDMAX)
+	    vlan4k->fid > (((smi->chip >> 4) == CHIP_FAMILY_RTL8367D) ? RTL8367D_FIDMAX : RTL8367B_FIDMAX))
 		return -EINVAL;
 
 	memset(data, 0, sizeof(data));
@@ -1139,16 +1194,25 @@ static int rtl8367b_set_vlan_4k(struct rtl8366_smi *smi,
 	data[0] = (vlan4k->member & RTL8367B_TA_VLAN0_MEMBER_MASK) <<
 		  RTL8367B_TA_VLAN0_MEMBER_SHIFT;
 	data[0] |= (vlan4k->untag & RTL8367B_TA_VLAN0_UNTAG_MASK) <<
-		   RTL8367B_TA_VLAN0_UNTAG_SHIFT;
-	data[1] = (vlan4k->fid & RTL8367B_TA_VLAN1_FID_MASK) <<
-		  RTL8367B_TA_VLAN1_FID_SHIFT;
+		  RTL8367B_TA_VLAN0_UNTAG_SHIFT;
+
+	if ((smi->chip >> 4) == CHIP_FAMILY_RTL8367D)
+		data[1] = (vlan4k->fid & RTL8367D_TA_VLAN1_FID_MASK) <<
+			   RTL8367D_TA_VLAN1_FID_SHIFT;
+	else
+		data[1] = (vlan4k->fid & RTL8367B_TA_VLAN1_FID_MASK) <<
+			   RTL8367B_TA_VLAN1_FID_SHIFT;
 
 	for (i = 0; i < ARRAY_SIZE(data); i++)
 		REG_WR(smi, RTL8367B_TA_WRDATA_REG(i), data[i]);
 
 	/* write VID */
-	REG_WR(smi, RTL8367B_TA_ADDR_REG,
-	       vlan4k->vid & RTL8367B_TA_VLAN_VID_MASK);
+	if ((smi->chip >> 4) == CHIP_FAMILY_RTL8367D)
+		REG_WR(smi, RTL8367B_TA_ADDR_REG,
+		       vlan4k->vid & RTL8367D_TA_VLAN_VID_MASK);
+	else
+		REG_WR(smi, RTL8367B_TA_ADDR_REG,
+		       vlan4k->vid & RTL8367B_TA_VLAN_VID_MASK);
 
 	/* write table access control word */
 	REG_WR(smi, RTL8367B_TA_CTRL_REG, RTL8367B_TA_CTRL_CVLAN_WRITE);
@@ -1193,7 +1257,7 @@ static int rtl8367b_set_vlan_mc(struct rtl8366_smi *smi, u32 index,
 	    vlanmc->priority > RTL8367B_PRIORITYMAX ||
 	    vlanmc->member > RTL8367B_VLAN_MC0_MEMBER_MASK ||
 	    vlanmc->untag > RTL8367B_UNTAG_MASK ||
-	    vlanmc->fid > RTL8367B_FIDMAX)
+	    vlanmc->fid > (((smi->chip >> 4) == CHIP_FAMILY_RTL8367D) ? RTL8367D_FIDMAX : RTL8367B_FIDMAX))
 		return -EINVAL;
 
 	data[0] = (vlanmc->member & RTL8367B_VLAN_MC0_MEMBER_MASK) <<
@@ -1218,10 +1282,17 @@ static int rtl8367b_get_mc_index(struct rtl8366_smi *smi, int port, int *val)
 	if (port >= RTL8367B_NUM_PORTS)
 		return -EINVAL;
 
-	REG_RD(smi, RTL8367B_VLAN_PVID_CTRL_REG(port), &data);
+	if ((smi->chip >> 4) == CHIP_FAMILY_RTL8367D) {
+		REG_RD(smi, RTL8367D_VLAN_PVID_CTRL_REG(port), &data);
 
-	*val = (data >> RTL8367B_VLAN_PVID_CTRL_SHIFT(port)) &
-	       RTL8367B_VLAN_PVID_CTRL_MASK;
+		*val = (data >> RTL8367D_VLAN_PVID_CTRL_SHIFT(port)) &
+			RTL8367D_VLAN_PVID_CTRL_MASK;
+	} else {
+		REG_RD(smi, RTL8367B_VLAN_PVID_CTRL_REG(port), &data);
+
+		*val = (data >> RTL8367B_VLAN_PVID_CTRL_SHIFT(port)) &
+			RTL8367B_VLAN_PVID_CTRL_MASK;
+	}
 
 	return 0;
 }
@@ -1231,7 +1302,14 @@ static int rtl8367b_set_mc_index(struct rtl8366_smi *smi, int port, int index)
 	if (port >= RTL8367B_NUM_PORTS || index >= RTL8367B_NUM_VLANS)
 		return -EINVAL;
 
-	return rtl8366_smi_rmwr(smi, RTL8367B_VLAN_PVID_CTRL_REG(port),
+	if ((smi->chip >> 4) == CHIP_FAMILY_RTL8367D)
+		return rtl8366_smi_rmwr(smi, RTL8367D_VLAN_PVID_CTRL_REG(port),
+				RTL8367D_VLAN_PVID_CTRL_MASK <<
+					RTL8367D_VLAN_PVID_CTRL_SHIFT(port),
+				(index & RTL8367D_VLAN_PVID_CTRL_MASK) <<
+					RTL8367D_VLAN_PVID_CTRL_SHIFT(port));
+	else
+		return rtl8366_smi_rmwr(smi, RTL8367B_VLAN_PVID_CTRL_REG(port),
 				RTL8367B_VLAN_PVID_CTRL_MASK <<
 					RTL8367B_VLAN_PVID_CTRL_SHIFT(port),
 				(index & RTL8367B_VLAN_PVID_CTRL_MASK) <<
@@ -1294,7 +1372,10 @@ static int rtl8367b_sw_get_port_link(struct switch_dev *dev,
 	if (port >= RTL8367B_NUM_PORTS)
 		return -EINVAL;
 
-	rtl8366_smi_read_reg(smi, RTL8367B_PORT_STATUS_REG(port), &data);
+	if ((smi->chip >> 4) == CHIP_FAMILY_RTL8367D) 
+		rtl8366_smi_read_reg(smi, RTL8367D_PORT_STATUS_REG(port), &data);
+	else
+		rtl8366_smi_read_reg(smi, RTL8367B_PORT_STATUS_REG(port), &data);
 
 	link->link = !!(data & RTL8367B_PORT_STATUS_LINK);
 	if (!link->link)
@@ -1305,16 +1386,29 @@ static int rtl8367b_sw_get_port_link(struct switch_dev *dev,
 	link->tx_flow = !!(data & RTL8367B_PORT_STATUS_TXPAUSE);
 	link->aneg = !!(data & RTL8367B_PORT_STATUS_NWAY);
 
-	speed = (data & RTL8367B_PORT_STATUS_SPEED_MASK);
+	if ((smi->chip >> 4) == CHIP_FAMILY_RTL8367D)
+		speed = (data & RTL8367B_PORT_STATUS_SPEED_MASK) | ((data & RTL8367D_PORT_STATUS_SPEED1_MASK) >> RTL8367D_PORT_STATUS_SPEED1_SHIFT);
+	else
+		speed = (data & RTL8367B_PORT_STATUS_SPEED_MASK);
 	switch (speed) {
-	case 0:
+	case RTL8367B_SPEED_10:
 		link->speed = SWITCH_PORT_SPEED_10;
 		break;
-	case 1:
+	case RTL8367B_SPEED_100:
 		link->speed = SWITCH_PORT_SPEED_100;
 		break;
-	case 2:
+	case RTL8367B_SPEED_1000:
 		link->speed = SWITCH_PORT_SPEED_1000;
+		break;
+	case RTL8367D_SPEED_500:
+		if ((smi->chip >> 4) == CHIP_FAMILY_RTL8367D) {
+			link->speed = SWITCH_PORT_SPEED_500;
+		} else {
+			link->speed = SWITCH_PORT_SPEED_UNKNOWN;
+		}
+		break;
+	case RTL8367D_SPEED_2500:
+		link->speed = SWITCH_PORT_SPEED_2500;
 		break;
 	default:
 		link->speed = SWITCH_PORT_SPEED_UNKNOWN;
@@ -1559,22 +1653,35 @@ static int rtl8367b_detect(struct rtl8366_smi *smi)
 	}
 
 	switch (chip_ver) {
+	case 0x0010:
+		if (chip_num == 0x6642) {
+			chip_name = "8367S-VB";
+			smi->chip = CHIP_RTL8367S_VB;
+		}
+		break;
 	case 0x0020:
-		if (chip_num == 0x6367)
+		if (chip_num == 0x6367) {
 			chip_name = "8367RB-VB";
+			smi->chip = CHIP_RTL8367RB_VB;
+		}
 		break;
 	case 0x00A0:
-		if (chip_num == 0x6367)
+		if (chip_num == 0x6367) {
 			chip_name = "8367S";
+			smi->chip = CHIP_RTL8367S;
+		}
 		break;
 	case 0x1000:
 		chip_name = "8367RB";
+		smi->chip = CHIP_RTL8367RB;
 		break;
 	case 0x1010:
 		chip_name = "8367R-VB";
+		smi->chip = CHIP_RTL8367R_VB;
 	}
 
 	if (!chip_name) {
+		smi->chip = CHIP_UNKNOWN;
 		dev_err(smi->parent,
 			"unknown chip num:%04x ver:%04x, mode:%04x\n",
 			chip_num, chip_ver, chip_mode);
@@ -1611,6 +1718,7 @@ static int  rtl8367b_probe(struct platform_device *pdev)
 {
 	struct rtl8366_smi *smi;
 	int err;
+	int size;
 
 	smi = rtl8366_smi_probe(pdev);
 	if (IS_ERR(smi))
@@ -1621,9 +1729,16 @@ static int  rtl8367b_probe(struct platform_device *pdev)
 	smi->cmd_write = 0xb8;
 	smi->ops = &rtl8367b_smi_ops;
 	smi->num_ports = RTL8367B_NUM_PORTS;
-	if (of_property_read_u32(pdev->dev.of_node, "cpu_port", &smi->cpu_port)
-	    || smi->cpu_port >= smi->num_ports)
+
+	if (of_get_property(smi->parent->of_node, "realtek,extif2", &size))
+		smi->cpu_port = RTL8367B_CPU_PORT_NUM + 2;
+	else if (of_get_property(smi->parent->of_node, "realtek,extif1", &size))
+		smi->cpu_port = RTL8367B_CPU_PORT_NUM + 1;
+	else
 		smi->cpu_port = RTL8367B_CPU_PORT_NUM;
+
+	dev_info(smi->parent, "CPU port: %u\n", smi->cpu_port);
+
 	smi->num_vlan_mc = RTL8367B_NUM_VLANS;
 	smi->mib_counters = rtl8367b_mib_counters;
 	smi->num_mib_counters = ARRAY_SIZE(rtl8367b_mib_counters);
