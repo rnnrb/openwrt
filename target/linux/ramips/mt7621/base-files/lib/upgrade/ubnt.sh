@@ -46,11 +46,7 @@ platform_upgrade_ubnt_erx() {
 		exit 1
 	fi
 
-	local kernel_part="$(ubnt_get_target_kernel ${factory_mtd})"
-	if [ -z "$kernel_part" ]; then
-		echo "cannot find factory partition" >&2
-		exit 1
-	fi
+	local kernel_part="kernel1"
 
 	# This is a global defined in nand.sh, sets partition kernel will be flashed into
 	CI_KERNPART=${kernel_part}

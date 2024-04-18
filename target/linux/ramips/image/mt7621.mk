@@ -2506,12 +2506,16 @@ define Device/ubnt_edgerouter_common
   DEVICE_VENDOR := Ubiquiti
   IMAGE_SIZE := 256768k
   FILESYSTEMS := squashfs
-  KERNEL_SIZE := 3145728
+  KERNEL_SIZE := 6291456
   KERNEL_INITRAMFS := $$(KERNEL) | \
 	ubnt-erx-factory-image $(KDIR)/tmp/$$(KERNEL_INITRAMFS_PREFIX)-factory.tar
   IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
   DEVICE_PACKAGES += -wpad-basic-mbedtls -uboot-envtools
-  DEFAULT := n
+  DEVICE_COMPAT_VERSION := 2.0
+  DEVICE_COMPAT_MESSAGE :=  Partition table has been changed due to kernel size restrictions. \
+    Until the required changes are backported to a stable branch, it is required to boot into \
+    new initramfs image using serial console and tftp, to ensure you have the new layout in \
+    memory. After this perform a sysupgrade which will write the kernel to the 6MB kernel1 slot.
 endef
 
 define Device/ubnt_edgerouter-x
