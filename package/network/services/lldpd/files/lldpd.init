@@ -75,19 +75,42 @@ get_config_restart_hash() {
 	export -n "$var=$_hash"
 }
 
-get_config_cid_ifaces() {
+get_interface_csv_pattern() {
 	local _ifaces
-	config_get _ifaces 'config' "$2"
+	config_get _ifaces "$2" "$3"
 
 	local _iface _ifnames=""
+	# Set noglob to prevent '*' capturing diverse file names in the for ... in
+	set -o noglob
 	for _iface in $_ifaces; do
-		local _ifname=""
-		if network_get_device _ifname "$_iface" || [ -e "/sys/class/net/$_iface" ]; then
-			append _ifnames "${_ifname:-$_iface}" ","
+
+		local _l2device=""
+		if network_get_physdev _l2device "$_iface" || [ -e "/sys/class/net/$_iface" ]; then
+			append _ifnames "${_l2device:-$_iface}" ","
+		else
+			# Glob case (interface is e.g. '!eth1' or 'eth*' or '*')
+			append _ifnames "$_iface" ","
 		fi
 	done
+	# Turn noglob off i.e. enable glob again
+	set +o noglob
 
 	export -n "${1}=$_ifnames"
+}
+
+add_custom_tlv_callback()
+{
+	# syntax: configure [ports ethX [,…]] lldp custom-tlv [add | replace] oui OUI subtype SUBTYPE [oui-info content]
+	# lldpd and lldpcli warn about entries with invalid syntax - assume user provided data is OK.
+	# handle specific ports also, if that functionality lands one day
+	local _lldp_custom_tlv
+	local _ports
+	# example: configure lldp custom-tlv [add|replace] oui XX,XX,XX subtype XX oui-info XX[,XX,...]
+	config_get _lldp_custom_tlv "$1" 'lldp_custom_tlv'
+	# CSV of layer 3 device ports
+	get_interface_csv_pattern _ports "$1" 'ports'
+
+	echo "configure ${_ports:+ports $_ports }lldp custom-tlv $_lldp_custom_tlv" >> "$LLDPD_CONF"
 }
 
 write_lldpd_conf()
@@ -101,7 +124,7 @@ write_lldpd_conf()
 	config_get lldp_hostname 'config' 'lldp_hostname' "$(cat /proc/sys/kernel/hostname)"
 
 	local ifnames
-	get_config_cid_ifaces ifnames "interface"
+	get_interface_csv_pattern ifnames 'config' "interface"
 
 	local lldp_mgmt_ip
 	config_get lldp_mgmt_ip 'config' 'lldp_mgmt_ip'
@@ -186,6 +209,9 @@ write_lldpd_conf()
 	[ "$lldp_tx_hold" -gt 0 ] && echo "configure lldp tx-hold $lldp_tx_hold" >> "$LLDPD_CONF"
 	[ "$lldp_capability_advertisements" -gt 0 ] && echo "configure lldp capabilities-advertisements" >> "$LLDPD_CONF"
 	[ "$lldp_mgmt_addr_advertisements" -gt 0 ] && echo "configure lldp management-addresses-advertisements" >> "$LLDPD_CONF"
+
+	# Custom TLV handling
+	config_foreach add_custom_tlv_callback 'custom-tlv'
 
 	# Since lldpd's sysconfdir is /tmp, we'll symlink /etc/lldpd.d to /tmp/$LLDPD_CONFS_DIR
 	[ -e "$LLDPD_CONFS_DIR" ] || ln -s /etc/lldpd.d "$LLDPD_CONFS_DIR"
@@ -325,7 +351,7 @@ start_service() {
 
     # ChassisID interfaces
 	local ifnames
-	get_config_cid_ifaces ifnames "cid_interface"
+	get_interface_csv_pattern ifnames 'config' "cid_interface"
 
 	[ -n "$ifnames" ] && procd_append_param command -C "$ifnames"
 
