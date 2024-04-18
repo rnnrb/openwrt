@@ -403,12 +403,13 @@ hostapd_set_vlan() {
 hostapd_set_psk_file() {
 	local ifname="$1"
 	local vlan="$2"
-	local vlan_id=""
+	local type=""
 
-	json_get_vars mac vid key
+	json_get_vars mac vid key wps
 	set_default mac "00:00:00:00:00:00"
-	[ -n "$vid" ] && vlan_id="vlanid=$vid "
-	echo "${vlan_id} ${mac} ${key}" >> /var/run/hostapd-${ifname}.psk
+	[ -n "$vid" ] && type="vlanid=$vid "
+	[ -z "$type" ] && [ "$wps" = "1" ] && type="wps=1"
+	echo "${type} ${mac} ${key}" >> /var/run/hostapd-${ifname}.psk
 }
 
 hostapd_set_psk() {
