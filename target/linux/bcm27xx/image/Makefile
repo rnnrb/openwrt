@@ -94,7 +94,7 @@ define Device/rpi-2
   DEVICE_MODEL := 2B/2B 1.2
   DEVICE_VARIANT := (32bit)
   DEVICE_ALT0_VENDOR := Raspberry Pi
-  DEVICE_ALT0_MODEL := 3B/3B+/CM3
+  DEVICE_ALT0_MODEL := 3B/3B+/CM3/Zero2/Zero2W
   DEVICE_ALT0_VARIANT := (32bit)
   DEVICE_ALT1_VENDOR := Raspberry Pi
   DEVICE_ALT1_MODEL := 4B/400/CM4
@@ -111,7 +111,7 @@ define Device/rpi-2
 	raspberrypi,3-model-b raspberrypi,3-model-b-plus \
 	raspberrypi,3-compute-module raspberrypi,compute-module-3 \
 	raspberrypi,400 raspberrypi,4-compute-module raspberrypi,4-model-b \
-	raspberrypi,model-zero-2
+	raspberrypi,model-zero-2 raspberrypi,model-zero-2-w
   DEVICE_PACKAGES := \
 	cypress-firmware-43430-sdio \
 	brcmfmac-nvram-43430-sdio \
@@ -126,7 +126,7 @@ ifeq ($(SUBTARGET),bcm2709)
 endif
 
 define Device/rpi-3
-  DEVICE_MODEL := 3B/3B+/CM3
+  DEVICE_MODEL := 3B/3B+/CM3/Zero2/Zero2W
   DEVICE_VARIANT := (64bit)
   DEVICE_ALT0_VENDOR := Raspberry Pi
   DEVICE_ALT0_MODEL := 2B-1.2
@@ -142,7 +142,7 @@ define Device/rpi-3
 	raspberrypi,2-model-b-rev2 \
 	raspberrypi,3-model-b raspberrypi,3-model-b-plus \
 	raspberrypi,3-compute-module raspberrypi,compute-module-3 \
-	raspberrypi,model-zero-2
+	raspberrypi,model-zero-2 raspberrypi,model-zero-2-w
   DEVICE_PACKAGES := \
 	cypress-firmware-43430-sdio \
 	brcmfmac-nvram-43430-sdio \
