@@ -2516,7 +2516,6 @@ define Device/ubnt_edgerouter_common
     Until the required changes are backported to a stable branch, it is required to boot into \
     new initramfs image using serial console and tftp, to ensure you have the new layout in \
     memory. After this perform a sysupgrade which will write the kernel to the 6MB kernel1 slot.
-  DEFAULT := n
 endef
 
 define Device/ubnt_edgerouter-x
